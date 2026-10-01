@@ -14,12 +14,12 @@ permissions:
 
 concurrency:
   group: homepage-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 50
     permissions:
       contents: read
       packages: write
@@ -91,14 +91,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Alibaba Cloud registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.ALIYUN_REGISTRY }}
-          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
-          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
       - name: Build and publish Nginx image
+        id: image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -108,11 +102,38 @@ jobs:
             ghcr.io/42tr/homepage:latest
             ghcr.io/42tr/homepage:sha-${{ github.sha }}
             ghcr.io/42tr/homepage:run-${{ github.run_id }}-${{ github.run_attempt }}
-            ${{ env.ALIYUN_REGISTRY }}/42tr/homepage:latest
-            ${{ env.ALIYUN_REGISTRY }}/42tr/homepage:sha-${{ github.sha }}
-            ${{ env.ALIYUN_REGISTRY }}/42tr/homepage:run-${{ github.run_id }}-${{ github.run_attempt }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Install registry copy tool
+        if: github.event_name != 'pull_request'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends skopeo
+      - name: Log in to Alibaba Cloud registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ALIYUN_REGISTRY }}
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+      - name: Sync and verify Alibaba Cloud image
+        if: github.event_name != 'pull_request'
+        timeout-minutes: 40
+        env:
+          IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          source_image="docker://ghcr.io/42tr/homepage@${IMAGE_DIGEST}"
+          for tag in "run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" "sha-${GITHUB_SHA}" latest; do
+            destination_image="docker://${ALIYUN_REGISTRY}/42tr/homepage:${tag}"
+            echo "Syncing ${destination_image}"
+            skopeo --command-timeout 35m copy --all --preserve-digests --retry-times 3 \
+              --authfile "$HOME/.docker/config.json" \
+              "$source_image" "$destination_image"
+            actual_digest="sha256:$(skopeo inspect --authfile "$HOME/.docker/config.json" \
+              --raw "$destination_image" | sha256sum | cut -d ' ' -f 1)"
+            test "$actual_digest" = "$IMAGE_DIGEST"
+            echo "Verified ${tag}: ${actual_digest}"
+          done
       - name: Stop test container
         if: always()
         run: docker rm -f homepage-ci || true

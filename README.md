@@ -48,12 +48,14 @@ npm run preview
 
 工作流执行单元测试 → 更新 LeetCode → 生成并验证 `dist/` → 构建并检查 Nginx 镜像 → 发布 `linux/amd64`、`linux/arm64` 镜像。推送和手动运行还会检查浏览器交互、响应式布局和一页 PDF，并上传可下载的 `homepage-static` 静态资源包，保留一天。定时运行不反复上传相同的大体积媒体文件，避免消耗 Actions artifact 配额。
 
-同一次构建同步发布到两个仓库，均支持 `linux/amd64` 和 `linux/arm64`：
+同一次构建先发布到 GHCR，再按构建摘要同步到阿里云，均支持 `linux/amd64` 和 `linux/arm64`：
 
 - `ghcr.io/42tr/homepage:latest`
 - `crpi-gz6f3ok0ezphywc8.cn-shanghai.personal.cr.aliyuncs.com/42tr/homepage:latest`
 
 两个仓库同时发布 `sha-<commit>` 和 `run-<run-id>-<attempt>` 标签；每小时同一提交的数据会更新，`run-*` 可固定某一次构建。GHCR 使用 Actions 的 `GITHUB_TOKEN` 登录，阿里云使用仓库 Secrets `ALIYUN_REGISTRY_USERNAME` 和 `ALIYUN_REGISTRY_PASSWORD`。PR 仅构建验证，不登录或推送仓库。仓库 Variables 可设置 `SITE_URL` 和 `LEETCODE_USER_SLUG`。
+
+同步使用 Skopeo 复制全部架构，保留原始镜像摘要并逐个校验目标标签；网络错误最多重试三次。阿里云同步阶段限时 40 分钟，整个任务限时 50 分钟，允许首次上传大体积静态层，并保持在每小时触发间隔内。发布按分支串行运行，后续触发不会取消正在上传的任务。先发布本次运行和提交标签，全部内容上传后再更新 `latest`。
 
 GitHub Container Registry 首次发布的包可能为私有；公开拉取前在包设置中设为 Public，或使用有 `read:packages` 权限的凭据执行 `docker login ghcr.io`。
 
