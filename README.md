@@ -57,6 +57,8 @@ npm run preview
 
 同步使用 Skopeo 复制全部架构，保留原始镜像摘要并逐个校验目标标签；网络错误最多重试三次。阿里云同步阶段限时 40 分钟，整个任务限时 50 分钟，允许首次上传大体积静态层，并保持在每小时触发间隔内。发布按分支串行运行，后续触发不会取消正在上传的任务。先发布本次运行和提交标签，全部内容上传后再更新 `latest`。
 
+阿里云个人版拒绝构建证明附件的 `application/vnd.oci.empty.v1+json` manifest，发布时关闭自动 provenance 附件；两个仓库仍使用相同的双架构镜像索引和内容摘要。
+
 GitHub Container Registry 首次发布的包可能为私有；公开拉取前在包设置中设为 Public，或使用有 `read:packages` 权限的凭据执行 `docker login ghcr.io`。
 
 ## Docker 运行
