@@ -1,0 +1,24 @@
+---
+import '../style.css';
+const { title = '42tr · 个人主页', description = '42tr 的个人主页：全栈开发、系统架构与 AI 探索。' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#111216" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/star.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="42tr 博客 RSS" href="/blog/rss.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body><slot /></body>
+</html>

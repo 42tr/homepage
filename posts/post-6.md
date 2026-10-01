@@ -1,0 +1,155 @@
+---
+title: "redis 知识总结"
+date: 2025-01-13
+tags: ["redis"]
+summary: "Redis 用过很久了，重新梳理下~"
+---
+
+官方介绍：
+Redis 取自 Remote Dictionary Server.
+> Redis is an in-memory database that persists on disk. The data model is key-value, but many different kind of values are supported: Strings, Lists, Sets, Sorted Sets, Hashes, Streams, HyperLogLogs, Bitmaps.
+
+## 源码
+查看 [Github 源码](https://github.com/redis/redis)
+
+### 源码结构
+以 `redis 8.0` 分析
+- **`.codespell`** *代码拼写检查*
+- **`.github`** *github 相关*
+    - **`ISSUE_TEMPLATE`** *issue 模板*
+    - **`workflows`** *github actions 配置文件*
+- **`deps`** *dependencies 三方依赖*
+    - **`fast_float`** *高性能的浮点数解析库，用于将字符串高效解析为浮点数*
+    - **`fpconv`** *浮点数到字符串转换工具，优化性能*
+    - **`hdr_histogram`** *高效的数据结构和工具库，用于记录和分析具有极高动态范围的数值分布*
+    - **`hiredis`** *c 语言客户端*
+    - **`jemalloc`** *高性能内存分配器，在性能和内存碎片控制方面表现良好*
+    - **`linenoise`** *轻量级的行编辑库，用于实现 Redis CLI 的交互功能*
+    - **`lua`** *Lua 解释器，支持服务器端脚本功能*
+- **`modules`** *模块相关代码，Redis 的一个重要扩展机制，允许开发者以插件的形式扩展 Redis 的功能，而无需修改核心代码*
+    - **`redisbloom`** *布隆过滤器*
+    - **`redisearch`** *高性能的全文搜索引擎，了解不多，后续有机会尝试 TODO*
+    - **`redisjson`** *提供对JSON数据的原生支持*
+    - **`redistimeseries`** *开源的时序数据数据库*
+- **`src`** *核心目录*
+    - **`commands`** *关于 Redis 命令和所有关于它们的元数据，可以通过 COMMAND 命令获取*
+    - **`modules`** *实现 Redis module 的示例代码*
+    - **`acl.c`** *用户权限管理*
+    - **`adlist.c/adlist.h`** *一个通用的双链表实现*
+    - **`ae.c/ae.h`** *一个简单的事件驱动编程库，针对不同系统平台，需要使用不同的IO多路复用函数*
+    - **`ae_epoll.c`** *基于 ae.c 实现的 epoll（IO多路复用）*
+    - **`ae_evport.c`** *基于 ae.c 实现的 eport（IO多路复用）*
+    - **`ae_kqueue.c`** *基于 ae.c 实现的 kqueue（IO多路复用）*
+    - **`ae_select.c`** *基于 ae.c 实现的 select（IO多路复用）*
+    - **`anet.c/anet.h`** *一个更加简单的使用 POSIX 网络标准库（相较于内核提供的原生接口）*
+    - **`aof.c`** *AOF支持，将客户端执行的命令追加到 AOF 文件中*
+    - **`asciilogo.h`** *ASCII 码的 logo*
+    - **`atomicvar.h`** *原子计数器*
+    - **`bio.c/bio.h`** *Background I/O service，该机制用于处理 Redis 的后台任务（如AOF-Append Only File、RDB-Redis Database持久化等），从而避免这些操作阻塞主线程，提高系统的响应性和并发性*
+    - **`bitops.c`** *Bit operations*
+    - **`blocked.c`** *支持阻塞操作*
+    - **`call_reply.c/call_reply.h`** *负责命令响应*
+    - **`childinfo.c`**
+    - **`cli_command.c/cli_command.h`** *redis cli 使用*
+    - **`cli_common.c/cli_common.h`** *cli 通用方法*
+    - **`cluster.c/cluster.h`** *redis 集群实现*
+    - **`cluster_legacy.c/cluster_legacy.h`** *redis 集群API实现*
+    - **`commands.c/commands.def/commands.h`** *命令相关，def文件由 generate-command-code.py 生成*
+    - **`config.c/config.h`** *配置文件获取、配置命令实现*
+    - **`connection.c/connection.h/connhelpers.h`** *connection layer framework*
+      > Redis 从 6.0 版本开始引入了连接层框架（Connection Layer Framework）。这个框架为 Redis 的网络层实现带来了更多的灵活性和扩展性，允许开发者更容易地为 Redis 集成自定义的协议或者进行网络相关的扩展。
+    - **`crc16.c/crc16_slottable.h`** *CRC16（Cyclic Redundancy Check 16）校验算法，用于集群槽位计算*
+    - **`crc64.c/crc64.h`** *CRC64（Cyclic Redundancy Check 64）校验算法，用于 RDB/AOF 文件校验数据完整性*
+    - **`crcspeed.c/crcspeed.h`** *加速 CRC 计算*
+    - **`db.c`** *RDB 数据库实现*
+    - **`debug.c/debugmacro.h`** *调试实现*
+    - **`defrag.c`** *内存碎片整理*
+    - **`dict.c/dict.h`** *hash table 实现*
+    - **`ebuckets.c/ebuckets.h`** *ebuckets用于存储设置了过期时间的项目,支持添加、删除和活动过期的基本API*
+    - **`endianconv.c/endianconv.h`** *大小字节序转换*
+    - **`eval.c`** *负责 Lua 脚本执行*
+    - **`evict.c`** *Maxmemory指令处理（LRU驱逐和其他策略）*
+    - **`expire.c`** *Implementation of EXPIRE (keys with fixed time to live)*
+    - **`fmacros.h`** *跨平台的功能宏定义*
+    - **`fmtargs.h`** *参数格式化*
+    - **`function_lua.c/functions.c/functions.h`** *Lua 脚本引擎，实现与 Redis Functions 相关的逻辑*
+    - **`geo.c/geo.h/geohash.c/geohash.h/geohash_helper.c/geohash_helper.h`** *geo 实现*
+    - **`hyperloglog.c`** *hyperloglog 实现*
+    - **`intset.c/intset.h`** *整数集合数据结构的实现，用于优化整数 SET，以节省内存*
+    - **`iothread.c`** *IO 多线程实现*
+    - **`kvstore.c/kvstore.h`** *基于索引的 kv 存储实现`
+    - **`latency.c/latency.h`** *Latency monitor API 及其实现*
+    - **`lazyfree.c`** *惰性删除实现*
+    - **`listpack.c/listpack.h/listpack_malloc.h`** *一种用于向后遍历字符串列表的序列化格式和实现*
+    - **`localtime.c`** *时间时区处理*
+    - **`logreqres.c`** *实现了将客户端的请求和响应记录到文件中的接口*
+    - **`lolwut.c/lolwut.h/lolwut5.c/lolwut6.c`** *lolwut API 及其实现~*
+    - **`lzf.h/lzfP.h/lzf_c.c/lzf_d.c`** *对字符串和 RDB 文件进行压缩时使用的 LZF 压缩算法的实现*
+    - **`memtest.c`** *测试内存读写正确性和稳定性，检测系统内存是否存在错误*
+    - **`mkreleasehdr.h`** *生成与发布版本相关的头文件*
+    - **`module.c`** *redis module 实现*
+    - **`monotonic.c/monotonic.h`** *获取单调时间*
+    - **`mstr.c/mstr.h`** *数据类型 string 的实现*
+    - **`mt19937-64.c/mt19937-64.h`** *Mersenne Twister 64 位版本（MT19937-64）实现（伪随机数生成器）*
+    - **`multi.c`** *事务实现*
+    - **`networking.c`** *客户端网络操作库, 用于实现命令请求接收、发送命令回复等工作，文件中的函数大多为 write, read,close 等函数的包装，以及各种协议的分析和构建函数*
+    - **`notify.c`** *实现通知机制，处理与发布订阅（Pub/Sub）相关的操作以及键的过期和其他通知事件*
+    - **`object.c`** *关键文件，负责 Redis 中各种数据类型对象的管理和处理*
+    - **`pqsort.c`** *修改后的 NetBSD-libc-qsort 实现，以支持Redis范围的部分排序*
+    - **`pubsub.c`** *发布订阅（Pub/Sub）实现*
+    - **`quicklist.c/quicklist.h`** *A doubly linked list of listpacks*
+    - **`rand.c/rand.h`** *伪随机数生成器*
+    - **`rax.c/rax.h/rax_malloc.h`** *A radix tree implementation*
+    - **`rdb.c/rdb.h`** *RDB 持久化实现*
+    - **`redis-benchmark.c`** *性能测试*
+    - **`redis-check-aof.c`** *AOF 文件合法性检查*
+    - **`redis-check-rdb.c`** *RDB 文件合法性检查*
+    - **`redis-cli.c`** *redis cli*
+    - **`redis-trib.rb`** *Redis集群管理的Ruby脚本工具，用于创建、检查、修复和删除集群* 
+    - **`redisassert.c/redisassert.h`** *redis 的断言*
+    - **`redismodule.h`** *redis module 接口*
+    - **`release.c`** *记录和生成 Redis 的发行版本信息*
+    - **`replication.c`** *异步复制实现*
+    - **`resp_parser.c/resp_parser.h`** *处理 RESP (REdis Serialization Protocol) 协议，解析和处理客户端请求的 RESP 消息格式*
+    - **`rio.c/rio.h`** *对文件 I/O 函数的包装，在普通 I/O 函数的基础上增加了显式缓存、以及计算校验和等功能*
+    - **`script.c/script.h`** *Lua 脚本 执行相关的核心文件之一*
+    - **`script_lua.c/script_lua.h`** *Lua 脚本执行相关的核心文件之一，通常与 script.c 文件共同工作来实现 Lua 脚本的加载、执行、缓存管理以及错误处理等功能*
+    - **`sds.c/sds.h/sdsalloc.h`** *A C dynamic strings library*
+    - **`sentinel.c`** *redis 哨兵实现*
+    - **`server.c/server.h`** *负责服务器的启动、维护和关闭等事项*
+    - **`setcpuaffinity.c/setproctitle.c`** *进程环境设置*
+    - **`sha1.c/sha1.h`** *SHA1 校验和计算*
+    - **`sha256.c/sha256.h`** *SHA256 校验和计算*
+    - **`siphash.c`** *siphash 实现*
+    - **`slowlog.c/slowlog.h`** *slowlog 慢查询 API 及其实现*
+    - **`socket.c`** *负责处理 Redis 服务器与客户端之间的网络通信*
+    - **`solarisfixes.c`** *针对 Solaris 系统的补丁*
+    - **`sort.c`** *sort 命令实现*
+    - **`sparkline.c/sparkline.h`** *ASCII sparkline 图表*
+    - **`stream.h`** *Redis Stream 结构体与接口定义*
+    - **`strl.c`** *字符串处理操作*
+    - **`syncio.c`** *同步socket和文件io处理*
+    - **`syscheck.c/syscheck.h`** *系统检查*
+    - **`t_hash.c`** *Redis Hash 数据结构*
+    - **`t_list.c`** *Redis List 数据结构*
+    - **`t_set.c`** *Redis Set 数据结构*
+    - **`t_stream.c`** *Redis Stream 数据结构*
+    - **`t_string.c`** *Redis String 数据结构*
+    - **`t_zset.c`** *Redis Zset 数据结构*
+    - **`testhelp.c`** *测试辅助宏*
+    - **`threads_mngr.c/threads_mngr.h`** *实现与多线程管理相关的功能。Redis 自 6.0 版本开始引入了多线程支持，用于提高某些操作（例如 I/O 操作）的性能*
+    - **`timeout.c`** *连接超时、请求超时、以及相关超时机制的管理*
+    - **`tls.c`** *TLS/SSL（传输层安全协议）相关功能*
+    - **`tracking.c`** *[Client side caching](https://antirez.com/news/130): keys tracking and invalidation*
+    - **`unix.c`** *unix socket connection implementation*
+    - **`util.c/util.h`** *辅助函数*
+    - **`valgrind.sup`** *Valgrind 抑制文件（suppressions file），用于屏蔽 Valgrind 工具报告的一些特定的、已知的内存使用警告*
+    - **`version.h`** *记录 Redis 版本号*
+    - **`ziplist.c/ziplist.h`** *Ziplist 数据结构的实现*
+    - **`zipmap.c/zipmap.h`** *Zipmap 数据结构的实现*
+    - **`zmalloc.c/zmalloc.h`** *total amount of allocated memory aware version of malloc()*
+    - **`crccombine.c/crccombine.h`** *CRC 计算用*
+    - **`eventnotifier.c/eventnotifier.h`** *An event notifier based on eventfd or pipe*
+    - **`iothread.c`** *The threaded io implementation*
+- **`tests`** *测试相关*
+- **`utils`** *工具脚本等*

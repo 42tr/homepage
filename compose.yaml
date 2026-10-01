@@ -1,0 +1,6 @@
+services:
+  homepage:
+    image: ghcr.io/42tr/homepage:latest
+    restart: unless-stopped
+    ports:
+      - "3000:80"

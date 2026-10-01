@@ -1,0 +1,21 @@
+---
+const { title = '42tr · 博客', description = '软件实践、系统观察与 AI 探索。' } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" type="image/svg+xml" href="/blog/blog-icon.svg" />
+    <link rel="stylesheet" href="/blog/blog.css" />
+    <link rel="alternate" type="application/rss+xml" title="42tr 博客 RSS" href="/blog/rss.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:type" content="article" />
+  </head>
+  <body><slot /></body>
+</html>

@@ -1,0 +1,36 @@
+---
+import Page from '../layouts/Page.astro';
+import Home from '../views/Home.vue';
+---
+<Page><Home /></Page>
+<script>
+  const skillToggle = document.querySelector('[data-skill-toggle]');
+  skillToggle?.addEventListener('click', () => {
+    const expanded = skillToggle.getAttribute('aria-expanded') !== 'true';
+    skillToggle.setAttribute('aria-expanded', String(expanded));
+    skillToggle.querySelector('[data-skill-label]').textContent = expanded ? '收起' : '展开';
+    document.querySelector('#skill-details').hidden = !expanded;
+    document.querySelector('.skill-summary').hidden = expanded;
+  });
+  const clock = document.querySelector('.clock-card');
+  if (clock) {
+    const time = clock.querySelector('.time');
+    const date = clock.querySelector('.date');
+    const week = clock.querySelector('.week');
+    const greeting = clock.querySelector('.greeting');
+    const update = () => {
+      const now = new Date();
+      time.textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+      date.textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+      week.textContent = `星期${'日一二三四五六'[now.getDay()]}`;
+      const hour = now.getHours();
+      greeting.textContent = hour < 6 ? '夜深了' : hour < 9 ? '早上好' : hour < 12 ? '上午好' : hour < 14 ? '中午好' : hour < 18 ? '下午好' : '晚上好';
+    };
+    update();
+    let timer = setInterval(update, 1000);
+    document.addEventListener('visibilitychange', () => {
+      clearInterval(timer);
+      if (!document.hidden) { update(); timer = setInterval(update, 1000); }
+    });
+  }
+</script>

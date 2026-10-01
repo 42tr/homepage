@@ -1,0 +1,8 @@
+---
+import Page from '../layouts/Page.astro';
+import Resume from '../views/Resume.vue';
+---
+<Page title="刘阳 · 简历 | 42tr" description="刘阳的工作经历、项目经验与技术能力，支持打印为一页 PDF。"><Resume /></Page>
+<script>
+  document.querySelector('[data-print-resume]')?.addEventListener('click', () => window.print());
+</script>

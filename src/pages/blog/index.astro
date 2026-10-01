@@ -1,0 +1,23 @@
+---
+import Blog from '../../layouts/Blog.astro';
+import Header from '../../components/BlogHeader.astro';
+import Footer from '../../components/BlogFooter.astro';
+import { getPosts } from '../../lib/posts.mjs';
+const posts = await getPosts();
+---
+<Blog><div class="page"><Header />
+  <section class="site-intro" aria-labelledby="blog-title">
+    <div class="intro-copy"><p class="kicker">CONSTELLATION ARCHIVE</p><h1 id="blog-title">在问题之间，<br /><span>寻找连接。</span></h1><p class="site-description">把软件实践、系统观察和 AI 探索，整理成一张可以不断扩展的个人星图。</p></div>
+    <aside class="intro-aside"><strong>NOW TRACKING</strong><span>systems / rust</span><span>agents / search</span><span>notes: <em>{posts.length} signals</em></span></aside>
+  </section>
+  <section class="archive"><aside class="archive-aside"><strong>ARCHIVE / 文章轨迹</strong><div class="archive-legend">signal strength<em>● recent</em><span>○ archived</span><br />每个节点都是一次<br />真实的实践记录。</div></aside>
+    <div class="stream"><main class="post-list">{posts.map((post, index) => (
+      <a class="post-card" href={`/blog/posts/${post.slug}`}>
+        <span class="post-index">{String(index + 1).padStart(2, '0')}</span><div class="post-copy"><h2 class="post-title">{post.title}</h2>
+          {post.summary && <p class="post-summary">{post.summary}</p>}
+          <div class="post-tags">{post.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+        </div><time class="post-date" datetime={post.date}>{post.date}</time><span class="post-trailing"><span class="post-arrow" aria-hidden="true">↗</span></span>
+      </a>
+    ))}</main></div>
+  </section><Footer />
+</div></Blog>

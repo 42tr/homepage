@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Blog</title>
+  <desc id="desc">A sheet of paper with a writing pencil</desc>
+  <rect width="64" height="64" rx="15" fill="#111216"/>
+  <path d="M18 12h20l10 10v30a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4Z" fill="#EEEEF2"/>
+  <path d="M38 12v10h10" fill="#A2A3B1"/>
+  <path d="M21 32h16M21 38h22M21 44h12" stroke="#77718F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44 30.5 52.5 22a2.8 2.8 0 0 1 4 4L48 34.5l-5.5 1.5 1.5-5.5Z" fill="#B5AFFF" stroke="#111216" stroke-width="2" stroke-linejoin="round"/>
+</svg>
