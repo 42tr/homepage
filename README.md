@@ -39,6 +39,7 @@ npm run preview
 - RSS 包含全文，站内图片和视频地址转换为绝对地址。站点 canonical 和 RSS 地址使用 `SITE_URL`。
 - LeetCode 在构建前并发获取四组公开数据，单次请求 15 秒超时、最多重试三次；失败时保留同一用户的上次成功快照及真实更新时间。没有可用快照时构建流程失败，不发布空数据。
 - HTML、RSS 和 JSON 使用 `no-cache`；带内容哈希的 `/_astro/` 资源缓存一年。Nginx 启用 gzip，未知地址返回真正的 404。
+- Docker 将博客媒体、静态页面与每小时变化的主页、JSON 分层，LeetCode 更新不会重新上传和拉取整套 46 MB 媒体。
 - 原来依赖 SQLite 的博客阅读计数不再保留。
 
 ## GitHub Actions 与镜像
