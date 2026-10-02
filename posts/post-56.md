@@ -37,7 +37,11 @@ idf.py flash monitor
 
 项目最早从 `hello_tft/` 开始。它用 SPI 驱动 ILI9341，在 ESP32-S3 上显示内置 Flash 的 RGB565 图片，不依赖 SD 卡。这个阶段先把最容易出问题的部分固定下来：LCD 控制器确实返回了 `93 41`，GPIO 接线和竖屏方向也在真实硬件上核对过。
 
-![ESP32-S3 点亮 TFT 屏幕的实拍演示（循环 GIF）](/blog/images/esp42-first-display.gif)
+<video autoplay muted loop playsinline preload="metadata" poster="/blog/images/esp42-first-display.jpg" aria-label="ESP32-S3 点亮 TFT 屏幕的实拍演示" style="display:block;width:100%;max-height:75vh;margin:1.5em auto;border-radius:10px;background:#0d1117;">
+  <source src="/blog/images/esp42-first-display.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+  <source src="/blog/images/esp42-first-display.mp4" type="video/mp4">
+  当前浏览器不支持播放此视频。
+</video>
 
 这段实拍动图记录了点亮屏幕阶段的显示效果。先确认供电、SPI 接线和显示输出，再继续做软件功能。
 
@@ -111,7 +115,11 @@ python3 tests/test_body_stream.py
 
 下面是触摸滑动查看的实拍动图：
 
-![ESP32-S3 触摸滑动查看演示（循环 GIF）](/blog/images/esp42-touch-swipe.gif)
+<video autoplay muted loop playsinline preload="metadata" poster="/blog/images/esp42-touch-swipe.jpg" aria-label="ESP32-S3 触摸滑动查看演示" style="display:block;width:100%;max-height:75vh;margin:1.5em auto;border-radius:10px;background:#0d1117;">
+  <source src="/blog/images/esp42-touch-swipe.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+  <source src="/blog/images/esp42-touch-swipe.mp4" type="video/mp4">
+  当前浏览器不支持播放此视频。
+</video>
 
 ## 语音唤醒
 

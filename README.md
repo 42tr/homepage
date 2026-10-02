@@ -35,12 +35,12 @@ npm run preview
 ## 内容与实现
 
 - 主页和简历保留原布局，直接输出 HTML；关闭 JavaScript 仍能阅读。时钟、技能展开/收起和打印使用少量原生脚本，无浏览器框架或接口依赖。
-- 文章位于 `posts/*.md`，图片、GIF 和视频位于 `public/blog/images/`。Front matter 包含 `title`、`date`、可选 `tags` 和 `summary`。文章按日期降序排列。
+- 文章位于 `posts/*.md`，图片和视频位于 `public/blog/images/`。动图使用 MP4（H.264）加 AV1 WebM 双份 `<source>`，并带 poster 首帧，不再使用 GIF。Front matter 包含 `title`、`date`、可选 `tags` 和 `summary`。文章按日期降序排列。
 - Markdown、代码高亮和目录在构建时生成，目录使用解析后的标题，避免把代码块内的标题误认为章节。未知语言退回转义后的普通文本。
 - RSS 包含全文，站内图片和视频地址转换为绝对地址。站点 canonical 和 RSS 地址使用 `SITE_URL`。
 - LeetCode 在构建前并发获取四组公开数据，单次请求 15 秒超时、最多重试三次；失败时保留同一用户的上次成功快照及真实更新时间。没有可用快照时构建流程失败，不发布空数据。
 - HTML、RSS 和 JSON 使用 `no-cache`；带内容哈希的 `/_astro/` 资源缓存一年。Nginx 启用 gzip，未知地址返回真正的 404。
-- Docker 将博客媒体、静态页面与每小时变化的主页、JSON 分层，LeetCode 更新不会重新上传和拉取整套 46 MB 媒体。
+- Docker 将博客媒体、静态页面与每小时变化的主页、JSON 分层，LeetCode 更新不会重新上传和拉取整套 9 MB 媒体。
 - 列表与文章页显示实时阅读计数。Nginx 将文章 GET 请求镜像到计数服务，沿用原来的页面浏览量规则；列表、RSS、HEAD、未知文章与查询计数接口不会增加计数。不开 JavaScript 也会统计访问，页面正文不依赖计数服务；服务暂不可用时隐藏计数。
 - SQLite 使用 WAL 和逐次提交，避免重启丢失已提交的阅读计数。只有构建清单内的文章允许新增计数；Nginx 的写入口为内部请求，公网仅开放查询。
 
