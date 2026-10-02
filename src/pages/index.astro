@@ -33,4 +33,35 @@ import Home from '../views/Home.vue';
       if (!document.hidden) { update(); timer = setInterval(update, 1000); }
     });
   }
+  const leetcode = document.querySelector('.leetcode-card');
+  if (leetcode) {
+    // The card renders the build-time snapshot; the backend refreshes it every 10 minutes.
+    const node = (selector) => leetcode.querySelector(selector);
+    const whole = (value) => Number.isSafeInteger(value) && value >= 0 ? value : null;
+    fetch('/api/leetcode', { cache: 'no-store', signal: AbortSignal.timeout(15000) })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((snapshot) => {
+        const total = whole(snapshot.question_total);
+        const solved = whole(snapshot.question_solved);
+        if (!total || solved === null || solved > total) return;
+        for (const field of ['rating', 'global_ranking', 'global_total_participants', 'local_ranking', 'local_total_participants']) {
+          const value = whole(snapshot[field]);
+          const target = node(`[data-leetcode="${field}"]`);
+          if (value !== null && target) target.textContent = value;
+        }
+        const questions = node('[data-leetcode="questions"]');
+        if (questions) questions.textContent = `${solved} / ${total}`;
+        const fill = node('[data-leetcode-fill]');
+        if (fill) fill.style.width = `${Math.round(solved / total * 100)}%`;
+        const rating = whole(snapshot.rating);
+        const ring = node('[data-leetcode-ring]');
+        if (rating !== null && ring) ring.setAttribute('stroke-dasharray', `${rating / 3000 * 326.73} 326.73`);
+        const updated = node('[data-leetcode-updated]');
+        const stamp = new Date(snapshot.updated_at);
+        if (updated && !Number.isNaN(stamp.getTime())) {
+          updated.textContent = `数据更新：${new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', dateStyle: 'medium', timeStyle: 'short' }).format(stamp)}`;
+        }
+      })
+      .catch(() => {});
+  }
 </script>

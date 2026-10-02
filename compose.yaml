@@ -13,6 +13,8 @@ services:
     command: [python, /app/server.py]
     environment:
       PYTHONDONTWRITEBYTECODE: '1'
+      LEETCODE_USER_SLUG: ${LEETCODE_USER_SLUG:-U72xhfFR3l}
+      LEETCODE_REFRESH_SECONDS: ${LEETCODE_REFRESH_SECONDS:-600}
     volumes:
       - blog-counter-app:/app:ro
       - blog-views:/data
@@ -28,7 +30,7 @@ services:
         restart: true
   views-manifest:
     image: ${HOMEPAGE_IMAGE:-ghcr.io/42tr/homepage:latest}
-    entrypoint: [sh, -c, "cp /opt/homepage-views/*.py /app/ && cp /usr/share/nginx/html/api/blog-posts.json /app/posts.json"]
+    entrypoint: [sh, -c, "cp /opt/homepage-views/*.py /app/ && cp /usr/share/nginx/html/api/blog-posts.json /app/posts.json && cp /usr/share/nginx/html/api/leetcode.json /app/leetcode.json"]
     volumes:
       - blog-counter-app:/app
 

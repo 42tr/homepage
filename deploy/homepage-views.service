@@ -9,8 +9,9 @@ Type=exec
 DynamicUser=true
 WorkingDirectory=/disk/app/homepage/counter-app
 Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=LEETCODE_REFRESH_SECONDS=600
 EnvironmentFile=/disk/app/homepage/counter.env
-ExecStart=/usr/bin/python3 /disk/app/homepage/counter-app/server.py --database /var/lib/homepage-views/blog-views.sqlite3 --posts /disk/app/homepage/counter-app/posts.json --listen ${BLOG_VIEWS_LISTEN}
+ExecStart=/usr/bin/python3 /disk/app/homepage/counter-app/server.py --database /var/lib/homepage-views/blog-views.sqlite3 --posts /disk/app/homepage/counter-app/posts.json --leetcode-seed /disk/app/homepage/counter-app/leetcode.json --listen ${BLOG_VIEWS_LISTEN}
 StateDirectory=homepage-views
 StateDirectoryMode=0700
 ProtectSystem=strict

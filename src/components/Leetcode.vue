@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue'
 
+// Build-time snapshot: rendered into the HTML so the card works without JavaScript.
+// The vanilla script in src/pages/index.astro replaces these values from /api/leetcode.
 import snapshot from '../../data/leetcode.json'
 const updatedDate = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(snapshot.updated_at))
 const data = ref(snapshot)
@@ -40,10 +42,11 @@ const solvePercent = computed(() => {
                                         cy="60"
                                         r="52"
                                         :stroke-dasharray="`${(data.rating || 0) / 3000 * 326.73} 326.73`"
+                                        data-leetcode-ring
                                     />
                                 </svg>
                                 <div class="ring-text">
-                                    <span class="ring-value">{{ data.rating || '--' }}</span>
+                                    <span class="ring-value" data-leetcode="rating">{{ data.rating || '--' }}</span>
                                     <span class="ring-label">竞赛分</span>
                                 </div>
                             </div>
@@ -52,26 +55,26 @@ const solvePercent = computed(() => {
                         <div class="stat-list">
                             <div class="stat-item">
                                 <span class="label">全球排名</span>
-                                <span class="value">{{ data.global_ranking || '--' }} <span class="total">/ {{ data.global_total_participants || '--' }}</span></span>
+                                <span class="value"><span data-leetcode="global_ranking">{{ data.global_ranking || '--' }}</span> <span class="total">/ <span data-leetcode="global_total_participants">{{ data.global_total_participants || '--' }}</span></span></span>
                             </div>
                             <div class="stat-item">
                                 <span class="label">全国排名</span>
-                                <span class="value">{{ data.local_ranking || '--' }} <span class="total">/ {{ data.local_total_participants || '--' }}</span></span>
+                                <span class="value"><span data-leetcode="local_ranking">{{ data.local_ranking || '--' }}</span> <span class="total">/ <span data-leetcode="local_total_participants">{{ data.local_total_participants || '--' }}</span></span></span>
                             </div>
                             <div class="stat-item">
                                 <span class="label">已解答</span>
                                 <div class="solve-bar-wrapper">
                                     <div class="solve-bar">
-                                        <div class="solve-fill" :style="{ width: solvePercent + '%' }"></div>
+                                        <div class="solve-fill" :style="{ width: solvePercent + '%' }" data-leetcode-fill></div>
                                     </div>
-                                    <span class="solve-text">{{ data.question_solved || 0 }} / {{ data.question_total || 0 }}</span>
+                                    <span class="solve-text" data-leetcode="questions">{{ data.question_solved || 0 }} / {{ data.question_total || 0 }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </template>
             </div>
-            <p class="updated-date">数据更新：{{ updatedDate }}</p>
+            <p class="updated-date" data-leetcode-updated>数据更新：{{ updatedDate }}</p>
         </div>
     </a>
 </template>

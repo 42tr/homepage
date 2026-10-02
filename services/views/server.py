@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""Small counter service; article rendering remains entirely in Nginx."""
+"""Small counter and LeetCode service; article rendering remains entirely in Nginx."""
 import argparse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import re
 import signal
 import sqlite3
+import sys
 import threading
 from urllib.parse import urlsplit
 
+from leetcode import DEFAULT_USER, REFRESH_SECONDS, LeetCode
 from store import Store
 
 SLUG = re.compile(r"[A-Za-z0-9_-]+")
@@ -39,7 +42,11 @@ class Posts:
             return self.slugs
 
 
-def make_server(address, store, posts):
+def log(message):
+    print(message, file=sys.stderr, flush=True)
+
+
+def make_server(address, store, posts, leetcode=None):
     class Handler(BaseHTTPRequestHandler):
         def setup(self):
             super().setup()
@@ -70,6 +77,12 @@ def make_server(address, store, posts):
                 elif path.startswith("/api/blog/views/") and path[16:] in slugs:
                     slug = path[16:]
                     self.send_json(200, {"slug": slug, "views": store.counts((slug,))[slug]})
+                elif path == "/api/leetcode":
+                    snapshot = leetcode.snapshot() if leetcode else None
+                    if snapshot is None:
+                        self.send_json(503, {"error": "leetcode unavailable"})
+                    else:
+                        self.send_json(200, snapshot)
                 else:
                     self.send_json(404, {"error": "not found"})
             except (OSError, ValueError, sqlite3.Error) as error:
@@ -106,13 +119,24 @@ def main():
     parser.add_argument("--posts", default="/app/posts.json")
     parser.add_argument("--listen", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8081)
+    parser.add_argument("--leetcode-user", default=os.environ.get("LEETCODE_USER_SLUG") or DEFAULT_USER)
+    parser.add_argument("--leetcode-seed", default="/app/leetcode.json")
+    parser.add_argument("--leetcode-cache", default=None,
+                        help="defaults to leetcode.json next to --database")
+    parser.add_argument("--leetcode-interval", type=int,
+                        default=int(os.environ.get("LEETCODE_REFRESH_SECONDS") or REFRESH_SECONDS))
     args = parser.parse_args()
-    with make_server((args.listen, args.port), Store(args.database), Posts(args.posts)) as server:
+    leetcode = LeetCode(args.leetcode_user, seed=args.leetcode_seed, interval=args.leetcode_interval,
+                        cache=args.leetcode_cache or str(Path(args.database).parent / "leetcode.json"),
+                        log=log)
+    leetcode.start()
+    with make_server((args.listen, args.port), Store(args.database), Posts(args.posts), leetcode) as server:
         def stop(_signal, _frame):
             threading.Thread(target=server.shutdown, daemon=True).start()
         signal.signal(signal.SIGTERM, stop)
         signal.signal(signal.SIGINT, stop)
         server.serve_forever()
+    leetcode.stop()
 
 
 if __name__ == "__main__":

@@ -26,6 +26,39 @@ test('clock updates and skills toggle without framework hydration', async ({ pag
   expect(errors).toEqual([]);
 });
 
+const snapshot = {
+  user_slug: 'U72xhfFR3l', updated_at: '2026-10-02T00:00:00.000Z', site_ranking: 1, rating: 2000,
+  global_ranking: 7, global_total_participants: 70, local_ranking: 3, local_total_participants: 30,
+  submission_calendar: '{"1":2}', question_total: 200, question_solved: 100,
+};
+
+test('leetcode card adopts the backend snapshot', async ({ page }) => {
+  await page.route('**/api/leetcode', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(snapshot) }));
+  await page.goto('/');
+  const card = page.locator('.leetcode-card');
+  await expect(card.locator('[data-leetcode="rating"]')).toHaveText('2000');
+  await expect(card.locator('[data-leetcode="global_ranking"]')).toHaveText('7');
+  await expect(card.locator('[data-leetcode="local_total_participants"]')).toHaveText('30');
+  await expect(card.locator('[data-leetcode="questions"]')).toHaveText('100 / 200');
+  await expect(card.locator('[data-leetcode-updated]')).toContainText('2026');
+  expect(await card.locator('[data-leetcode-fill]').evaluate((fill) => fill.style.width)).toBe('50%');
+  expect(await card.locator('[data-leetcode-ring]').getAttribute('stroke-dasharray')).toMatch(/^217\.8/);
+});
+
+test('leetcode card rejects an invalid backend snapshot', async ({ page }) => {
+  await page.route('**/api/leetcode', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...snapshot, question_total: 0 }) }));
+  await page.goto('/');
+  await expect(page.locator('.leetcode-card [data-leetcode="questions"]')).not.toHaveText('100 / 200');
+});
+
+test('leetcode card keeps build-time data when the backend is unavailable', async ({ page }) => {
+  await page.route('**/api/leetcode', (route) => route.abort());
+  await page.goto('/');
+  const card = page.locator('.leetcode-card');
+  await expect(card).toContainText('已解答');
+  await expect(card.locator('[data-leetcode="rating"]')).toHaveText(/^\d+$/);
+  await expect(card.locator('[data-leetcode="questions"]')).toHaveText(/^\d+ \/ \d+$/);
+});
 test('resume print button works and PDF uses one A4 page', async ({ page }) => {
   await page.goto('/resume');
   await page.evaluate(() => { window.print = () => { window.printCalled = true; }; });
