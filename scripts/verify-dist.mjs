@@ -19,6 +19,8 @@ const snapshot = JSON.parse(await readFile(new URL('api/leetcode.json', root)));
 assert.ok(snapshot.question_total > 0 && snapshot.updated_at);
 const posts = await getPosts();
 const listing = await readFile(new URL('blog/index.html', root), 'utf8');
+const manifest = JSON.parse(await readFile(new URL('api/blog-posts.json', root)));
+assert.deepEqual(manifest, posts.map(({ slug }) => slug));
 const rss = await readFile(new URL('blog/rss.xml', root), 'utf8');
 assert.equal((rss.match(/<item>/g) || []).length, posts.length);
 assert.match(rss, /<content:encoded>/);
@@ -26,7 +28,8 @@ assert.doesNotMatch(rss, /(?:src|href)=["']\//);
 for (const post of posts) {
   assert.ok(listing.includes(`/blog/posts/${post.slug}`));
   const html = await readFile(new URL(`blog/posts/${post.slug}/index.html`, root), 'utf8');
-  assert.doesNotMatch(html, /<script|__BLOG_VIEW_COUNT/);
+  assert.doesNotMatch(html, /__BLOG_VIEW_COUNT/);
+  assert.ok(html.includes(`data-blog-views="${post.slug}"`));
   for (const heading of post.toc) assert.ok(html.includes(`id="${heading.id}"`));
   for (const match of html.matchAll(/\b(?:src|poster)=["'](\/[^"']+)["']/g)) {
     await access(new URL(decodeURIComponent(match[1]).split(/[?#]/)[0].slice(1), root));

@@ -1,0 +1,25 @@
+[Unit]
+Description=Homepage persistent blog reading counts
+Requires=docker.service
+After=docker.service
+PartOf=docker.service
+
+[Service]
+Type=exec
+DynamicUser=true
+WorkingDirectory=/disk/app/homepage/counter-app
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=/disk/app/homepage/counter.env
+ExecStart=/usr/bin/python3 /disk/app/homepage/counter-app/server.py --database /var/lib/homepage-views/blog-views.sqlite3 --posts /disk/app/homepage/counter-app/posts.json --listen ${BLOG_VIEWS_LISTEN}
+StateDirectory=homepage-views
+StateDirectoryMode=0700
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+Restart=always
+RestartSec=3
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target

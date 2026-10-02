@@ -16,7 +16,7 @@ const posts = await getPosts();
         <span class="post-index">{String(index + 1).padStart(2, '0')}</span><div class="post-copy"><h2 class="post-title">{post.title}</h2>
           {post.summary && <p class="post-summary">{post.summary}</p>}
           <div class="post-tags">{post.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
-        </div><time class="post-date" datetime={post.date}>{post.date}</time><span class="post-trailing"><span class="post-arrow" aria-hidden="true">↗</span></span>
+        </div><time class="post-date" datetime={post.date}>{post.date}</time><span class="post-trailing"><span class="post-views" data-blog-views={post.slug} hidden></span><span class="post-arrow" aria-hidden="true">↗</span></span>
       </a>
     ))}</main></div>
   </section><Footer />

@@ -35,6 +35,8 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm test
+      - name: Verify durable blog counters and legacy import
+        run: python3 -m unittest discover -s services/views -p 'test_*.py'
       - name: Restore last successful LeetCode snapshot
         if: github.event_name != 'pull_request'
         uses: actions/cache/restore@v5
@@ -70,14 +72,15 @@ jobs:
           tags: homepage:verify
           cache-from: type=gha
       - name: Check Nginx and HTTP behavior
+        env:
+          HOMEPAGE_IMAGE: homepage:verify
+          HOMEPAGE_PORT: '8080'
+          COMPOSE_PROJECT_NAME: homepage-ci
         run: |
           docker run --rm homepage:verify nginx -t
-          docker run -d --name homepage-ci -p 127.0.0.1:8080:80 homepage:verify
-          for attempt in $(seq 1 20); do
-            if curl --fail --silent http://127.0.0.1:8080/health; then break; fi
-            sleep 1
-          done
+          docker compose up -d --wait --wait-timeout 90
           node scripts/verify-http.mjs
+          node scripts/verify-views.mjs
       - name: Install browser
         if: github.event_name != 'schedule'
         run: npx playwright install --with-deps chromium
@@ -138,4 +141,9 @@ jobs:
           done
       - name: Stop test container
         if: always()
-        run: docker rm -f homepage-ci || true
+        env:
+          HOMEPAGE_IMAGE: homepage:verify
+          HOMEPAGE_PORT: '8080'
+          COMPOSE_PROJECT_NAME: homepage-ci
+        run: |
+          docker compose down --volumes || true

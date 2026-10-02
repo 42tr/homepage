@@ -48,3 +48,21 @@ for (const width of [390, 1440]) {
     }
   });
 }
+
+test('blog lists and article pages show live reading counts', async ({ page }) => {
+  await page.goto('/blog');
+  const listingCounter = page.locator('[data-blog-views="post-56"]');
+  await expect(listingCounter).toBeVisible();
+  await expect(listingCounter).toHaveText(/[\d,]+ 次浏览/);
+  await page.goto('/blog/posts/post-56');
+  await expect(page.locator('.detail-views')).toBeVisible();
+  await expect(page.locator('.detail-views')).toHaveText(/[\d,]+ 次浏览/);
+});
+
+test('blog content stays readable if the counter is unavailable', async ({ page }) => {
+  await page.route('**/api/blog/views', (route) => route.abort());
+  await page.goto('/blog/posts/post-56');
+  await expect(page.locator('.detail-title')).toBeVisible();
+  await expect(page.locator('.markdown-body')).toBeVisible();
+  await expect(page.locator('.detail-views')).toBeHidden();
+});

@@ -4,3 +4,7 @@
 !deploy/nginx.conf
 !dist/
 !dist/**
+!services/
+!services/views/
+!services/views/server.py
+!services/views/store.py

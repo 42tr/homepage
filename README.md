@@ -1,6 +1,6 @@
 # homepage
 
-42tr 的独立个人网站，包含主页、简历、51 篇 Markdown 博客、RSS 和 LeetCode 数据。由 x 拆出，使用 Astro 在构建时生成完整 HTML；Vue 仅用于构建时渲染现有页面。运行时只有 Nginx，无 Rust、Node.js 服务、数据库、认证或 LeetCode 网络请求。
+42tr 的独立个人网站，包含主页、简历、51 篇 Markdown 博客、RSS、阅读计数和 LeetCode 数据。由 x 拆出，使用 Astro 在构建时生成完整 HTML；Vue 仅用于构建时渲染现有页面。页面由 Nginx 提供，阅读计数由独立的 Python 标准库服务和 SQLite 保存，不依赖 x 或 Firefly。
 
 ## 本地开发与构建
 
@@ -29,6 +29,7 @@ npm run preview
 | `/blog/posts/<slug>` | 博客文章，保持原文章路径 |
 | `/blog/rss.xml` | 包含全文及绝对媒体链接的 RSS |
 | `/api/leetcode`、`/api/leetcode.json` | 同一个静态 JSON 快照 |
+| `/api/blog/views`、`/api/blog/views/<slug>` | 全部文章或单篇文章的实时阅读计数，只读 |
 | `/health` | Nginx 健康检查 |
 
 ## 内容与实现
@@ -40,7 +41,8 @@ npm run preview
 - LeetCode 在构建前并发获取四组公开数据，单次请求 15 秒超时、最多重试三次；失败时保留同一用户的上次成功快照及真实更新时间。没有可用快照时构建流程失败，不发布空数据。
 - HTML、RSS 和 JSON 使用 `no-cache`；带内容哈希的 `/_astro/` 资源缓存一年。Nginx 启用 gzip，未知地址返回真正的 404。
 - Docker 将博客媒体、静态页面与每小时变化的主页、JSON 分层，LeetCode 更新不会重新上传和拉取整套 46 MB 媒体。
-- 原来依赖 SQLite 的博客阅读计数不再保留。
+- 列表与文章页显示实时阅读计数。Nginx 将文章 GET 请求镜像到计数服务，沿用原来的页面浏览量规则；列表、RSS、HEAD、未知文章与查询计数接口不会增加计数。不开 JavaScript 也会统计访问，页面正文不依赖计数服务；服务暂不可用时隐藏计数。
+- SQLite 使用 WAL 和逐次提交，避免重启丢失已提交的阅读计数。只有构建清单内的文章允许新增计数；Nginx 的写入口为内部请求，公网仅开放查询。
 
 ## GitHub Actions 与镜像
 
@@ -66,7 +68,7 @@ GitHub Container Registry 首次发布的包可能为私有；公开拉取前在
 ```sh
 npm run build
 docker build -t homepage:local .
-docker run --rm -p 3000:80 homepage:local
+HOMEPAGE_IMAGE=homepage:local docker compose up -d --wait
 ```
 
 使用已发布的镜像：
@@ -78,19 +80,32 @@ docker compose up -d --wait
 
 `compose.yaml` 默认映射 `3000:80`。如果旧 x 已占用 3000，请先调整端口，再在现有反向代理中把个人网站和博客路由指向新容器。博客子域名的根路径可在外层代理重定向到 `/blog`。
 
+Compose 使用同一份网站镜像导出计数程序和文章清单，再运行 Python 计数容器；不需要在部署机编译静态资源。`blog-views` 卷保存 `/data/blog-views.sqlite3`，拉取网站镜像、重建容器或更新文章不会清空该卷。备份时使用 SQLite backup API；不要对运行中的数据库只复制主文件，也不要用 `docker compose down -v` 删除持久化卷。
+
 每小时 Actions 更新的是镜像，已有容器需运行上述 `pull`、`up` 才会更新；本仓库不会自动修改现有生产服务。需要站点每小时同步更新时，可由部署主机每小时执行这两条命令。
+
+当前主机使用 `homepage.service` 和 `homepage-views.service`，`homepage-update.timer` 每小时从阿里云更新镜像。计数库位于 `/var/lib/homepage-views/blog-views.sqlite3`；后端只监听 Docker 网桥地址，通过网站的 Nginx 访问。`deploy/update.sh` 同步提取镜像内的计数程序和清单，仅程序变化时重启计数服务，失败时恢复上一版程序和网站镜像，数据库保持独立。
+
+## 从 x 迁移阅读计数
+
+```sh
+python3 services/views/import_legacy.py /disk/app/x/x.sqlite3 /path/to/blog-views.sqlite3
+```
+
+工具只读旧数据库，事务导入 `blog_post_views`，保留 slug、计数和更新时间。已删除文章的历史计数仍保留在数据库；重复执行只补入比上次导入更多的旧计数，不重复累加，也不覆盖迁移后的新访问。当前主机首次导入完成后应由 systemd 的 StateDirectory 管理计数库权限。
 
 ## 验证
 
 ```sh
+python3 -m unittest discover -s services/views -p 'test_*.py'
 docker run --rm homepage:local nginx -t
-docker run -d --name homepage-test -p 127.0.0.1:8080:80 homepage:local
-node scripts/verify-http.mjs
+HOMEPAGE_IMAGE=homepage:local docker compose up -d --wait
+node scripts/verify-http.mjs http://127.0.0.1:3000
+node scripts/verify-views.mjs http://127.0.0.1:3000
 npx playwright install chromium
-npx playwright test
-docker rm -f homepage-test
+BASE_URL=http://127.0.0.1:3000 npx playwright test
 ```
 
-浏览器测试可用 `BASE_URL` 指向其他端口；`CHROMIUM_EXECUTABLE` 可指定已有 Chromium。测试覆盖无脚本阅读、时钟更新、技能切换、打印按钮、一页 A4 PDF、移动端与桌面布局。
+浏览器测试可用 `BASE_URL` 指向其他端口；`CHROMIUM_EXECUTABLE` 可指定已有 Chromium。测试覆盖无脚本阅读、时钟更新、技能切换、打印按钮、一页 A4 PDF、移动端与桌面布局、阅读计数展示和计数服务不可用时的正文阅读。
 
 原始内容来自 [42tr/x](https://github.com/42tr/x)。独立应用部署前，原 x 的线上服务不会因为本仓库构建而自动切换。

@@ -13,7 +13,7 @@ const { post } = Astro.props;
     <main class="detail-layout"><article class="post-detail">
       <header class="detail-header"><p class="detail-kicker">FIELD NOTES / 技术札记</p><h1 class="detail-title">{post.title}</h1>
         {post.summary && <p class="detail-summary">{post.summary}</p>}
-        <div class="detail-meta"><time datetime={post.date}>{post.date}</time>{post.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+        <div class="detail-meta"><time datetime={post.date}>{post.date}</time><span class="detail-views" data-blog-views={post.slug} hidden></span>{post.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
       </header><div class="markdown-body" set:html={post.html} />
     </article><aside class="detail-aside"><nav class="toc" aria-label="文章目录">
       {post.toc.length ? <><p class="toc-title">文章目录</p><ol class="toc-list">{post.toc.map((heading) => <li class={`toc-level-${heading.depth}`}><a href={`#${heading.id}`} set:html={heading.title} /></li>)}</ol></> : <p class="toc-empty">这篇文章还没有章节标题。</p>}

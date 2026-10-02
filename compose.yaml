@@ -1,6 +1,37 @@
 services:
   homepage:
-    image: ghcr.io/42tr/homepage:latest
+    image: ${HOMEPAGE_IMAGE:-ghcr.io/42tr/homepage:latest}
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "${HOMEPAGE_PORT:-3000}:80"
+    depends_on:
+      views:
+        condition: service_healthy
+  views:
+    image: python:3.13-alpine
+    restart: unless-stopped
+    command: [python, /app/server.py]
+    environment:
+      PYTHONDONTWRITEBYTECODE: '1'
+    volumes:
+      - blog-counter-app:/app:ro
+      - blog-views:/data
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8081/health', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
+    depends_on:
+      views-manifest:
+        condition: service_completed_successfully
+        restart: true
+  views-manifest:
+    image: ${HOMEPAGE_IMAGE:-ghcr.io/42tr/homepage:latest}
+    entrypoint: [sh, -c, "cp /opt/homepage-views/*.py /app/ && cp /usr/share/nginx/html/api/blog-posts.json /app/posts.json"]
+    volumes:
+      - blog-counter-app:/app
+
+volumes:
+  blog-views:
+  blog-counter-app:
