@@ -56,11 +56,6 @@ import Home from '../views/Home.vue';
         const rating = whole(snapshot.rating);
         const ring = node('[data-leetcode-ring]');
         if (rating !== null && ring) ring.setAttribute('stroke-dasharray', `${rating / 3000 * 326.73} 326.73`);
-        const updated = node('[data-leetcode-updated]');
-        const stamp = new Date(snapshot.updated_at);
-        if (updated && !Number.isNaN(stamp.getTime())) {
-          updated.textContent = `数据更新：${new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', dateStyle: 'medium', timeStyle: 'short' }).format(stamp)}`;
-        }
       })
       .catch(() => {});
   }

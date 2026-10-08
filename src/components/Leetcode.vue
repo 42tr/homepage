@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 // Build-time snapshot: rendered into the HTML so the card works without JavaScript.
 // The vanilla script in src/pages/index.astro replaces these values from /api/leetcode.
 import snapshot from '../../data/leetcode.json'
-const updatedDate = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(snapshot.updated_at))
 const data = ref(snapshot)
 const loading = ref(false)
 const error = ref(null)
@@ -74,7 +73,6 @@ const solvePercent = computed(() => {
                     </div>
                 </template>
             </div>
-            <p class="updated-date" data-leetcode-updated>数据更新：{{ updatedDate }}</p>
         </div>
     </a>
 </template>
@@ -251,8 +249,4 @@ const solvePercent = computed(() => {
     padding: 20px;
     font-size: 0.95rem;
 }
-</style>
-
-<style scoped>
-.updated-date { margin: 16px 0 0; color: #a2a3b1; font-size: 10px; }
 </style>

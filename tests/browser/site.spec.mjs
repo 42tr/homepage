@@ -40,7 +40,6 @@ test('leetcode card adopts the backend snapshot', async ({ page }) => {
   await expect(card.locator('[data-leetcode="global_ranking"]')).toHaveText('7');
   await expect(card.locator('[data-leetcode="local_total_participants"]')).toHaveText('30');
   await expect(card.locator('[data-leetcode="questions"]')).toHaveText('100 / 200');
-  await expect(card.locator('[data-leetcode-updated]')).toContainText('2026');
   expect(await card.locator('[data-leetcode-fill]').evaluate((fill) => fill.style.width)).toBe('50%');
   expect(await card.locator('[data-leetcode-ring]').getAttribute('stroke-dasharray')).toMatch(/^217\.8/);
 });
