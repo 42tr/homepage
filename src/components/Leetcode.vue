@@ -81,13 +81,14 @@ const solvePercent = computed(() => {
 .leetcode-card {
     padding: 20px;
     min-height: 280px;
+    flex: 1;
 }
 
 .card-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .leetcode-icon {
@@ -103,7 +104,7 @@ const solvePercent = computed(() => {
 .stats-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
 /* 加载动画 */
@@ -134,8 +135,8 @@ const solvePercent = computed(() => {
 
 .rating-ring {
     position: relative;
-    width: 110px;
-    height: 110px;
+    width: 82px;
+    height: 82px;
 }
 
 .ring-svg {
@@ -170,7 +171,7 @@ const solvePercent = computed(() => {
 }
 
 .ring-value {
-    font-size: 22px;
+    font-size: 19px;
     font-weight: 700;
     color: #ffa116;
 }
@@ -191,7 +192,7 @@ const solvePercent = computed(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 0;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 

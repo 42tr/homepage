@@ -4,14 +4,6 @@ import Home from '../views/Home.vue';
 ---
 <Page><Home /></Page>
 <script>
-  const skillToggle = document.querySelector('[data-skill-toggle]');
-  skillToggle?.addEventListener('click', () => {
-    const expanded = skillToggle.getAttribute('aria-expanded') !== 'true';
-    skillToggle.setAttribute('aria-expanded', String(expanded));
-    skillToggle.querySelector('[data-skill-label]').textContent = expanded ? '收起' : '展开';
-    document.querySelector('#skill-details').hidden = !expanded;
-    document.querySelector('.skill-summary').hidden = expanded;
-  });
   const clock = document.querySelector('.clock-card');
   if (clock) {
     const time = clock.querySelector('.time');

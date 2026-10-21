@@ -14,8 +14,9 @@
         </div>
         <div class="divider"></div>
         <div class="patent-details">
-            <div class="patent-name">
-                多路召回方法、训练方法及处理设备
+            <div class="detail-item">
+                <span class="detail-label">名称</span>
+                <span class="detail-value patent-name">多路召回方法、训练方法及处理设备</span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">公开号</span>
@@ -76,11 +77,8 @@
 }
 
 .patent-name {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
+    text-align: right;
     line-height: 1.5;
-    margin-bottom: 4px;
 }
 
 .detail-item {

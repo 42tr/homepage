@@ -26,6 +26,7 @@ const certificateUrl = "https://learn.nvidia.com/certificates?id=Bzp6L9x0Ty6tZJK
             </svg>
             <div class="certificate-title">NVIDIA 深度学习认证</div>
         </div>
+        <div class="divider"></div>
         <div class="certificate-image-wrapper">
             <img
                 :src="certificateImg"
@@ -34,9 +35,6 @@ const certificateUrl = "https://learn.nvidia.com/certificates?id=Bzp6L9x0Ty6tZJK
                 width="640"
                 height="537"
             />
-        </div>
-        <div class="certificate-footer">
-            <span class="certificate-link">查看证书 →</span>
         </div>
     </a>
 </template>
@@ -54,7 +52,13 @@ const certificateUrl = "https://learn.nvidia.com/certificates?id=Bzp6L9x0Ty6tZJK
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 16px 16px 12px;
+    padding: 22px 22px 0;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 12px 22px 0;
 }
 
 .certificate-icon {
@@ -72,31 +76,22 @@ const certificateUrl = "https://learn.nvidia.com/certificates?id=Bzp6L9x0Ty6tZJK
 
 .certificate-image-wrapper {
     width: 100%;
+    height: 198px;
+    padding: 16px 0 22px;
+    box-sizing: border-box;
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.2);
+    background: transparent;
+    transition: padding 0.5s ease;
+}
+
+.certificate-card:hover .certificate-image-wrapper {
+    padding: 0;
 }
 
 .certificate-image-wrapper img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.certificate-card:hover .certificate-image-wrapper img {
-    transform: scale(1.03);
-}
-
-.certificate-footer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 12px 16px 16px;
-}
-
-.certificate-link {
-    font-size: 13px;
-    font-weight: 500;
-    color: #76b900;
+    object-fit: contain;
 }
 </style>

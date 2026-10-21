@@ -15,16 +15,6 @@ import Haruhi from '../assets/haruhi.webp?url';
 <template>
     <div class="home-page">
         <div class="home-shell">
-            <header class="site-header">
-                <a class="wordmark" href="#home" aria-label="42tr 首页">42tr<span class="brand-dot">.</span></a>
-                <span class="header-note">一个持续构建中的个人空间</span>
-                <nav aria-label="页面导航">
-                    <a href="#toolbox">技术</a>
-                    <a href="#journey">经历</a>
-                    <a href="/resume" target="_blank" rel="noopener noreferrer">简历 <span aria-hidden="true">↗</span></a>
-                </nav>
-            </header>
-
             <main id="home">
                 <section class="intro-grid" aria-label="关于我">
                     <SelfInfo />
@@ -41,7 +31,7 @@ import Haruhi from '../assets/haruhi.webp?url';
 
                 <section id="toolbox" class="page-section" aria-labelledby="toolbox-title">
                     <div class="section-heading">
-                        <h2 id="toolbox-title"><span class="section-index">01 /</span> 我的工具箱</h2>
+                        <h2 id="toolbox-title"><span class="section-index">01 /</span> 技术栈</h2>
                         <span class="section-caption">从界面到系统，从想法到实现</span>
                     </div>
                     <div class="toolbox-grid">
@@ -100,13 +90,8 @@ import Haruhi from '../assets/haruhi.webp?url';
     -webkit-font-smoothing: antialiased;
 }
 .home-shell { width: min(1440px, 100%); margin-inline: auto; padding: 0 clamp(16px, 3.5vw, 64px); box-sizing: border-box; }
-.site-header { min-height: 96px; display: flex; align-items: center; gap: 24px; }
-.wordmark { font: 800 28px/1 ui-monospace, monospace; letter-spacing: -2px; color: #eeeef2; }
-.brand-dot { color: var(--home-accent); }
-.header-note { font-size: 12px; color: var(--home-muted); }
-.site-header nav { display: flex; gap: 28px; margin-left: auto; font-size: 13px; }
-.site-header nav a { color: #bfc0cc; transition: color .2s; }
-.site-header nav a:hover, .section-link:hover { color: #fff; }
+.home-shell main { padding-top: 48px; }
+.section-link:hover { color: #fff; }
 .intro-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; }
 .side-notes { display: grid; grid-template-rows: auto 1fr; gap: 20px; min-width: 0; }
 .home-page :deep(.card) { width: 100%; min-width: 0; max-width: none; margin: 0; border: 1px solid var(--home-border); border-radius: 20px; background: var(--home-surface); box-shadow: none; backdrop-filter: none; }
@@ -125,15 +110,20 @@ import Haruhi from '../assets/haruhi.webp?url';
 .section-heading h2 { font-size: 16px; font-weight: 500; margin: 0; }
 .section-index { color: var(--home-accent); font: 11px ui-monospace, monospace; margin-right: 10px; }
 .section-caption, .section-link { color: var(--home-muted); font-size: 12px; }
-.toolbox-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.toolbox-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 1fr); gap: 20px; align-items: stretch; }
 .toolbox-grid > * { min-width: 0; }
+.toolbox-grid > :deep(a) { display: flex; }
 .credentials-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .credentials-grid :deep(.uni-card), .credentials-grid :deep(.exam-card), .credentials-grid :deep(.patent-card), .life-grid :deep(.license-card) { padding: 22px; }
-.credentials-grid :deep(.certificate-header) { padding: 22px 18px 14px; }
+.life-grid :deep(.license-card) { display: flex; flex-direction: column; }
+.life-grid :deep(.license-details) { flex: 1; justify-content: space-evenly; }
+.life-grid :deep(.license-tags) { margin-top: auto; padding-top: 12px; }
+.credentials-grid :deep(.uni-card), .credentials-grid :deep(.exam-card), .credentials-grid :deep(.patent-card) { display: flex; flex-direction: column; }
+.credentials-grid :deep(.uni-tags), .credentials-grid :deep(.exam-tags), .credentials-grid :deep(.patent-tags) { margin-top: auto; padding-top: 12px; }
+.credentials-grid :deep(.uni-details), .credentials-grid :deep(.exam-details), .credentials-grid :deep(.patent-details) { flex: 1; justify-content: space-evenly; }
+.credentials-grid :deep(.uni-header), .credentials-grid :deep(.exam-header), .credentials-grid :deep(.patent-header), .credentials-grid :deep(.certificate-header) { min-height: 48px; }
 .credentials-grid :deep(.certificate-icon) { width: 26px; height: 26px; }
 .credentials-grid :deep(.certificate-title) { font-size: 13px; }
-.credentials-grid :deep(.certificate-image-wrapper) { height: 160px; margin: 0; }
-.credentials-grid :deep(.certificate-image-wrapper img) { width: 100%; height: 100%; object-fit: contain; }
 .life-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 20px; }
 .interest-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .interest-card img { width: 100%; height: 100%; min-height: 220px; max-height: 260px; object-fit: cover; object-position: center 35%; }
@@ -142,12 +132,9 @@ import Haruhi from '../assets/haruhi.webp?url';
 .interest-card figcaption > span:last-child { color: var(--home-muted); font-size: 12px; }
 @media (max-width: 1100px) {
     .credentials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .credentials-grid :deep(.certificate-image-wrapper) { height: 150px; }
 }
 @media (max-width: 760px) {
-    .site-header { min-height: 76px; }
-    .header-note { display: none; }
-    .site-header nav { gap: 20px; }
+    .home-shell main { padding-top: 32px; }
     .intro-grid, .toolbox-grid, .life-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
     .side-notes { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; gap: 16px; }
     .now-card { padding: 20px; }
@@ -160,7 +147,6 @@ import Haruhi from '../assets/haruhi.webp?url';
     .side-notes, .credentials-grid { grid-template-columns: minmax(0, 1fr); }
     .now-card h2 br { display: none; }
     .now-card h2 { font-size: 19px; }
-    .credentials-grid :deep(.certificate-image-wrapper) { height: 190px; }
     .interest-card { grid-template-columns: minmax(0, 1fr); }
     .interest-card img { height: 210px; min-height: 0; }
     .interest-card figcaption { padding: 22px; }
