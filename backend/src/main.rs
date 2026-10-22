@@ -276,7 +276,31 @@ fn required_u64(value: &Value, key: &str) -> Result<u64> {
 }
 
 fn optional_u64(value: &Value, key: &str) -> u64 {
-    value.get(key).and_then(Value::as_u64).unwrap_or(0)
+    value
+        .get(key)
+        .and_then(|value| {
+            value.as_u64().or_else(|| {
+                value
+                    .as_f64()
+                    .filter(|number| number.is_finite() && *number >= 0.0)
+                    .map(|number| number.trunc() as u64)
+            })
+        })
+        .unwrap_or(0)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::optional_u64;
+    use serde_json::json;
+
+    #[test]
+    fn optional_numbers_accept_decimal_contest_ratings() {
+        let value = json!({"rating": 1717.297, "ranking": 12});
+        assert_eq!(optional_u64(&value, "rating"), 1717);
+        assert_eq!(optional_u64(&value, "ranking"), 12);
+        assert_eq!(optional_u64(&json!({"rating": null}), "rating"), 0);
+    }
 }
 
 fn question_count(value: &Value) -> Result<u64> {
