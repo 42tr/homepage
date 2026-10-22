@@ -1,5 +1,5 @@
 <script setup>
-import UESTC from '../assets/uestc.svg?url';
+import UESTC from '../assets/uestc.webp?url';
 </script>
 
 <template>

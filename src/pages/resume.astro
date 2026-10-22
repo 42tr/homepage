@@ -1,8 +1,34 @@
 ---
 import Page from '../layouts/Page.astro';
 import Resume from '../views/Resume.vue';
+
+const site = Astro.site ?? new URL('https://42tr.cn');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: '刘阳',
+  url: new URL('/resume', site).href,
+  image: new URL('/og-resume.jpg', site).href,
+  sameAs: ['https://github.com/42tr', 'https://42tr.cn'],
+  jobTitle: 'AI 应用架构师 / 全栈工程师',
+  email: 'mailto:1055894396@qq.com',
+  telephone: '+86-18936861530',
+  worksFor: { '@type': 'Organization', name: '中科南京人工智能创新研究院' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: '电子科技大学' },
+  knowsAbout: ['LLM', 'RAG', 'Agent', 'MCP', 'Rust', 'Python', 'Java', 'Go', '全栈开发', '系统架构'],
+};
 ---
-<Page title="刘阳 · 简历 | 42tr" description="刘阳的工作经历、项目经验与技术能力，支持打印为一页 PDF。"><Resume /></Page>
+<Page title="刘阳-AI应用架构师-简历" description="刘阳的工作经历、项目经验与技术能力，支持打印为一页 PDF。" ogImage="/og-resume.jpg">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+  <Resume />
+</Page>
 <script>
   document.querySelector('[data-print-resume]')?.addEventListener('click', () => window.print());
 </script>
+<noscript>
+  <div style="position:fixed;top:0;left:0;right:0;z-index:10;padding:8px 16px;background:#23232d;color:#bfc0cc;font-size:12px;text-align:center">
+    JavaScript 已禁用，导出 PDF 请直接使用浏览器打印（Ctrl+P / ⌘P）
+  </div>
+</noscript>

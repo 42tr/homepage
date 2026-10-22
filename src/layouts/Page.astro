@@ -1,7 +1,8 @@
 ---
 import '../style.css';
-const { title = '42tr · 个人主页', description = '42tr 的个人主页：全栈开发、系统架构与 AI 探索。' } = Astro.props;
+const { title = '42tr · 个人主页', description = '42tr 的个人主页：全栈开发、系统架构与 AI 探索。', ogImage } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -18,7 +19,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <slot name="head" />
   </head>
   <body><slot /></body>
 </html>

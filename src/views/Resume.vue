@@ -1,33 +1,57 @@
 <script setup>
 import Avatar from "../assets/avatar.webp?url";
-import UESTC from "../assets/uestc.svg?url";
-import asiainfo from "../assets/asiainfo.ico?url";
+import UESTC from "../assets/uestc.webp?url";
+import asiainfo from "../assets/asiainfo.svg?url";
 import Rich from "../assets/rich.webp?url";
 import Huawei from "../assets/huawei.webp?url";
 import Hontor from "../assets/hontor.webp?url";
 
+const profile = {
+    name: "刘阳",
+    titleEn: "AI APPLICATION ARCHITECT · FULL-STACK ENGINEER",
+    summary: ["从底层系统到 AI Agent，把复杂技术变成稳定、可交付的产品。", "擅长跨语言架构设计、工程效率建设与 0→1 应用落地。"],
+    introPoints: [
+        "业务路径横跨通信设备、行业大数据与 AI 应用三类领域。",
+        "既能独立交付完整产品，也能主导架构设计与研发管理。",
+        "热衷技术研究，业余折腾嵌入式硬件与开源项目。",
+    ],
+    experienceYears: "8+",
+    philosophy: "“技术的价值，不只在于能运行，更在于能持续创造结果。”",
+    footerNote: "用系统思维解决问题，用工程能力交付结果。",
+};
+
 const contacts = [
     { label: "电话", value: "18936861530", href: "tel:18936861530", icon: "phone" },
     { label: "邮箱", value: "1055894396@qq.com", href: "mailto:1055894396@qq.com", icon: "mail" },
+    { label: "GitHub", value: "github.com/42tr", href: "https://github.com/42tr", icon: "github" },
     { label: "个人网站", value: "42tr.cn", href: "https://42tr.cn", icon: "link" },
 ];
 
+// 屏幕版与打印版共用同一份数据；printPoints / printStack 是打印版的一页精简表述。
 const experiences = [
     {
         company: "中科南京人工智能创新研究院",
         shortName: "中科南京",
         role: "架构师 · 研发经理",
         period: "2025.03 — 至今",
+        periodStart: "2025-03",
         logo: Hontor,
         accent: "violet",
+        printClass: "print-job-hontor",
+        printStack: ["LLM", "Agent", "MCP", "Python", "Rust"],
         projects: [
             {
                 title: "AI 助手与智能办公平台",
-                summary: "围绕真实业务场景搭建对话式 AI 助手，负责架构设计、研发管理与关键模块落地。",
+                summary: "围绕真实业务场景搭建对话式 AI 助手与智能办公平台。",
                 points: [
                     "基于 Qwen、DeepSeek 等模型构建 Agent 与 MCP 能力，形成可组合的智能助手架构。",
                     "集成 CosyVoice、SenseVoice、MinerU，落地知识库溯源、公文撰写、PPT / 脑图生成与智能会议等功能。",
                     "使用 Python 负责模型集成与业务编排，使用 Rust 开发知识库等高性能系统组件。",
+                ],
+                printPoints: [
+                    "基于 Qwen、DeepSeek 构建 Agent 与 MCP 能力，支持按用户场景组合工具与业务流程。",
+                    "集成 CosyVoice、SenseVoice、MinerU，落地知识库溯源、公文、PPT、脑图生成与智能会议。",
+                    "使用 Python 完成模型集成与业务编排，使用 Rust 开发知识库等高性能系统组件。",
                 ],
                 stack: ["LLM", "Agent", "MCP", "Python", "Rust"],
             },
@@ -38,28 +62,40 @@ const experiences = [
         shortName: "HUAWEI",
         role: "软件工程师 · CIE",
         period: "2021.09 — 2024.11",
+        periodStart: "2021-09",
         logo: Huawei,
         accent: "red",
+        printClass: "print-job-huawei",
+        printStack: ["C", "Go", "Rust", "Python", "RAG", "Elasticsearch", "Jenkins"],
         projects: [
             {
                 title: "维护辅助工具",
-                period: "2024.01 — 2024.11",
                 summary: "面向历史案例检索与运维问答的 RAG 应用，作为整体设计者参与开发。",
                 points: [
                     "设计整体架构并搭建前后端框架，融合关键词与语义搜索，提出多路召回重排序方案。",
                     "将问题搜索准确率从 50% 提升至 90%，成果获得“数据通信研发部长奖”。",
                     "完成内部聊天机器人接入与 Docker 化部署，并基于相关成果成功申请专利。",
                 ],
+                printPoints: [
+                    "设计 RAG 应用整体架构，搭建前后端框架并接入内部聊天机器人，支持历史案例检索与问答。",
+                    "优化 Elasticsearch 搜索效果，提出多路召回重排序方案，将问题搜索准确率从 <b>50% 提升至 90%</b>。",
+                    "成果获数据通信研发部长奖，成功申请专利，并完成应用 Docker 化部署。",
+                ],
                 stack: ["Spring Boot", "Vue 2", "LangChain", "Elasticsearch", "RAG"],
             },
             {
                 title: "AR 接入路由器",
-                period: "2021.09 — 2023.12",
-                summary: "参与路由器协议、系统机制与工程效率建设，兼顾底层开发和研发工具链。",
+                summary: "参与路由器协议与系统机制开发，兼顾底层实现和研发工具链。",
                 points: [
                     "使用 C 参与 SSH / TELNET / FTP / NETCONF、NCE 交互、补丁机制及系统模块开发维护。",
                     "维护并优化 Jenkins 门禁与 CI，MR 合入效率提升 10%+，构建发布效率提升 20%+。",
                     "用 Go、Python、Rust 开发补丁查重、构建网站和代码检查工具，每年减少约 2 人月投入。",
+                    "作为 Redis PMC 成员参与定制归一与升级，获 Redis 定制归一攻关激励团队奖。",
+                ],
+                printPoints: [
+                    "使用 C 参与 SSH、TELNET、FTP、NETCONF、NCE 交互、补丁机制及系统模块开发维护。",
+                    "优化 Jenkins 门禁与版本 CI，MR 合入效率提升 10%+，构建发布效率提升 20%+。",
+                    "使用 Go、Python、Rust 开发补丁构建、查重和代码检查工具，每年减少约 2 人月投入。",
                     "作为 Redis PMC 成员参与定制归一与升级，获 Redis 定制归一攻关激励团队奖。",
                 ],
                 stack: ["C", "Go", "Rust", "Python", "Jenkins", "Redis"],
@@ -71,8 +107,11 @@ const experiences = [
         shortName: "睿企",
         role: "后端 / 全栈工程师",
         period: "2020.05 — 2021.07",
+        periodStart: "2020-05",
         logo: Rich,
         accent: "blue",
+        printClass: "print-job-rich print-job-small",
+        printStack: ["Spring Boot", "React", "TiDB", "MinIO", "Kubernetes", "Elasticsearch"],
         projects: [
             {
                 title: "公安行业 NLP 应用",
@@ -80,6 +119,11 @@ const experiences = [
                 points: [
                     "维护数据标准化流程，设计并实现质态监管、热词雷达、自动报告等应用。",
                     "使用内部 ETL 工具处理多方数据，承担部分 React 管理页面与前端问题修复。",
+                ],
+                printPoints: [
+                    "负责公安行业大数据标准化模块，维护数据处理流程并对接多方 ETL 数据源。",
+                    "设计并实现质态监管、热词雷达、自动报告等应用后端，承担部分 React 管理页面开发。",
+                    "基于 TiDB、MinIO、Elasticsearch 构建数据存储与检索能力，使用 Kubernetes 管理容器。",
                 ],
                 stack: ["Spring Boot", "React", "TiDB", "MinIO", "Kubernetes", "Elasticsearch"],
             },
@@ -90,8 +134,11 @@ const experiences = [
         shortName: "亚信科技",
         role: "全栈工程师",
         period: "2018.03 — 2020.05",
+        periodStart: "2018-03",
         logo: asiainfo,
         accent: "orange",
+        printClass: "print-job-asiainfo print-job-small",
+        printStack: ["Java", "Spring Boot", "MySQL", "Redis", "Kafka", "Electron"],
         projects: [
             {
                 title: "电信 CRM 3.0",
@@ -99,6 +146,11 @@ const experiences = [
                 points: [
                     "后端使用 Spring Boot + MyBatis，结合 Redis、Kafka、MySQL、Nginx 构建业务服务。",
                     "前端使用 Vita-Plus 与 Electron 开发桌面及业务应用。",
+                ],
+                printPoints: [
+                    "负责业务功能、数据库设计、服务部署与线上问题处理等全链路交付。",
+                    "使用 Spring Boot + MyBatis 构建后端，结合 Redis、Kafka、MySQL、Nginx 支撑业务系统。",
+                    "使用 Vita-Plus 与 Electron 开发前端和桌面应用。",
                 ],
                 stack: ["Java", "Spring Boot", "MySQL", "Redis", "Kafka", "Electron"],
             },
@@ -109,9 +161,22 @@ const experiences = [
 const skillGroups = [
     { title: "AI 工程", skills: ["LLM", "RAG", "Agent", "MCP", "LangChain"] },
     { title: "编程语言", skills: ["Rust", "Python", "Java", "Go", "JavaScript", "C"] },
-    { title: "工程与数据", skills: ["Docker / K8s", "Jenkins", "GitHub Actions", "MySQL", "Redis", "Elasticsearch"] },
-    { title: "前端与可视化", skills: ["Vue", "React", "ECharts", "Electron"] },
+    {
+        title: "工程与数据",
+        skills: ["Docker / K8s", "Jenkins", "GitHub Actions", "MySQL", "Redis", "Elasticsearch"],
+        printSkills: ["Docker/K8s", "Jenkins", "MySQL", "Redis", "ES"],
+    },
+    { title: "前端与可视化", printTitle: "前端", skills: ["Vue", "React", "ECharts", "Electron"] },
 ];
+
+const education = {
+    school: "电子科技大学",
+    major: "软件工程 · 本科",
+    period: "2014.09 — 2018.06",
+    periodStart: "2014-09",
+    award: "人民一等奖学金 · CET-4",
+    logo: UESTC,
+};
 
 const credentials = [
     { level: "高级", title: "系统架构设计师" },
@@ -147,20 +212,17 @@ const credentials = [
             <header class="hero">
                 <div class="hero-copy">
                     <div class="profile-top">
-                        <img class="avatar" :src="Avatar" alt="42tr 的头像" width="88" height="88" />
+                        <img class="avatar" :src="Avatar" alt="42tr 的头像" width="88" height="88" fetchpriority="high" />
                         <div>
                             <span class="eyebrow">RESUME / 关于我</span>
-                            <h1>刘阳<span class="brand-dot">.</span></h1>
+                            <h1>{{ profile.name }}<span class="brand-dot">.</span></h1>
                         </div>
                         <span class="title-code">ARCH · 42TR</span>
                     </div>
                     <div class="title-row">
                         <p>AI 应用架构师 <span>/</span> 全栈工程师</p>
                     </div>
-                    <p class="hero-intro">
-                        从底层系统到 AI Agent，把复杂技术变成稳定、可交付的产品。
-                        擅长跨语言架构设计、工程效率建设与 0→1 应用落地。
-                    </p>
+                    <p class="hero-intro">{{ profile.summary.join('') }}</p>
                 </div>
 
                 <aside class="hero-focus" aria-label="当前方向">
@@ -186,6 +248,9 @@ const credentials = [
                             <svg v-else-if="contact.icon === 'mail'" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
                                 <path d="m22 6-10 7L2 6" />
+                            </svg>
+                            <svg v-else-if="contact.icon === 'github'" class="icon-fill" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
                             </svg>
                             <svg v-else viewBox="0 0 24 24" aria-hidden="true">
                                 <circle cx="12" cy="12" r="10" />
@@ -233,14 +298,14 @@ const credentials = [
                                             <p>{{ experience.role }}</p>
                                         </div>
                                     </div>
-                                    <time>{{ experience.period }}</time>
+                                    <time :datetime="experience.periodStart">{{ experience.period }}</time>
                                 </header>
 
                                 <div class="project-list">
                                     <section v-for="project in experience.projects" :key="project.title" class="project">
                                         <div class="project-heading">
                                             <h4>{{ project.title }}</h4>
-                                            <span v-if="project.period">{{ project.period }}</span>
+                                            <time v-if="project.period" :datetime="project.periodStart">{{ project.period }}</time>
                                         </div>
                                         <p class="project-summary">{{ project.summary }}</p>
                                         <ul>
@@ -259,11 +324,10 @@ const credentials = [
                 <aside class="side-column">
                     <section class="side-section intro-card">
                         <span class="side-label">PROFILE / 个人档案</span>
-                        <p>
-                            全栈工程师，熟悉 Linux、Windows、macOS。既能深入 C / Rust 系统开发，
-                            也能用 Python、Java、Go 完成业务与 AI 应用交付；热衷技术研究与树莓派应用。
-                        </p>
-                        <div class="availability"><span></span> 当前专注 AI 应用架构</div>
+                        <ul class="intro-points">
+                            <li v-for="point in profile.introPoints" :key="point" v-html="point"></li>
+                        </ul>
+                        <div class="availability"><span></span> 当前专注 Agent 与 AI 应用</div>
                     </section>
 
                     <section class="side-section">
@@ -287,14 +351,14 @@ const credentials = [
                             <h2>教育背景</h2>
                         </div>
                         <div class="education-card">
-                            <img :src="UESTC" alt="电子科技大学" />
+                            <img :src="education.logo" :alt="education.school" />
                             <div>
-                                <time>2014.09 — 2018.06</time>
-                                <h3>电子科技大学</h3>
-                                <p>软件工程 · 本科</p>
+                                <time :datetime="education.periodStart">{{ education.period }}</time>
+                                <h3>{{ education.school }}</h3>
+                                <p>{{ education.major }}</p>
                             </div>
                         </div>
-                        <p class="education-note">人民一等奖学金 · CET-4</p>
+                        <p class="education-note">{{ education.award }}</p>
                     </section>
 
                     <section class="side-section">
@@ -312,7 +376,7 @@ const credentials = [
 
                     <section class="side-section philosophy-card">
                         <span>ENGINEERING PHILOSOPHY</span>
-                        <blockquote>“技术的价值，不只在于能运行，更在于能持续创造结果。”</blockquote>
+                        <blockquote>{{ profile.philosophy }}</blockquote>
                     </section>
                 </aside>
             </div>
@@ -322,23 +386,38 @@ const credentials = [
                     <a class="wordmark" href="/">42tr<span class="brand-dot">.</span></a>
                     <p>ARCHITECT · ENGINEER · BUILDER</p>
                 </div>
-                <p class="footer-note">用系统思维解决问题，用工程能力交付结果。</p>
+                <p class="footer-note">{{ profile.footerNote }}</p>
             </footer>
         </main>
 
-        <main class="print-resume" aria-label="刘阳一页简历打印版">
+        <div class="print-resume" aria-label="刘阳一页简历打印版">
             <header class="print-header">
+                <img class="print-avatar" :src="Avatar" alt="刘阳的头像" />
                 <div>
-                    <p class="print-kicker">AI APPLICATION ARCHITECT · FULL-STACK ENGINEER</p>
-                    <h1>刘阳<span>.</span></h1>
+                    <p class="print-kicker">{{ profile.titleEn }}</p>
+                    <h1>{{ profile.name }}<span>.</span></h1>
                     <h2>AI 应用架构师 <span>/</span> 全栈工程师</h2>
-                    <p class="print-summary">从底层系统到 AI Agent，把复杂技术变成稳定、可交付的产品。擅长跨语言架构设计、工程效率建设与 0→1 应用落地。</p>
+                    <p class="print-summary">{{ profile.summary[0] }}<br />{{ profile.summary[1] }}</p>
                 </div>
                 <div class="print-contact">
-                    <span>18936861530</span>
-                    <span>1055894396@qq.com</span>
-                    <span>42tr.cn</span>
-                    <strong>8+ 年研发经验</strong>
+                    <a v-for="contact in contacts" :key="contact.label" :href="contact.href">
+                        <svg v-if="contact.icon === 'phone'" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <svg v-else-if="contact.icon === 'mail'" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                            <path d="m22 6-10 7L2 6" />
+                        </svg>
+                        <svg v-else-if="contact.icon === 'github'" class="icon-fill" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                        </svg>
+                        <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                        <span>{{ contact.value }}</span>
+                    </a>
+                    <strong>{{ profile.experienceYears }} 年研发经验</strong>
                 </div>
             </header>
 
@@ -346,128 +425,92 @@ const credentials = [
                 <section class="print-main">
                     <div class="print-section-title"><span>01</span><h2>工作经历</h2><i></i></div>
 
-                    <article class="print-job print-job-hontor">
+                    <div class="print-jobs">
+                    <article
+                        v-for="experience in experiences"
+                        :key="experience.company"
+                        class="print-job"
+                        :class="experience.printClass"
+                    >
                         <header>
                             <div class="print-company">
-                                <span class="print-company-logo"><img :src="Hontor" alt="" /></span>
-                                <div><h3>中科南京人工智能创新研究院</h3><p>架构师 · 研发经理</p></div>
+                                <span class="print-company-logo"><img :src="experience.logo" alt="" /></span>
+                                <div><h3>{{ experience.company }}</h3><p>{{ experience.role }}</p></div>
                             </div>
-                            <time>2025.03 — 至今</time>
+                            <time :datetime="experience.periodStart">{{ experience.period }}</time>
                         </header>
-                        <h4>AI 助手与智能办公平台</h4>
-                        <ul>
-                            <li>作为架构师和研发经理，负责产品技术路线、系统架构、任务拆解以及关键模块落地。</li>
-                            <li>基于 Qwen、DeepSeek 构建 Agent 与 MCP 能力，支持按用户场景组合工具与业务流程。</li>
-                            <li>集成 CosyVoice、SenseVoice、MinerU，落地知识库溯源、公文、PPT、脑图生成与智能会议。</li>
-                            <li>使用 Python 完成模型集成与业务编排，使用 Rust 开发知识库等高性能系统组件。</li>
-                        </ul>
-                        <div class="print-stack"><span>LLM</span><span>Agent</span><span>MCP</span><span>Python</span><span>Rust</span></div>
+                        <template v-for="(project, projectIndex) in experience.projects" :key="project.title">
+                            <h4 :class="{ 'print-subproject': projectIndex > 0 }">
+                                {{ project.title }}
+                                <span v-if="project.period">{{ project.period }}</span>
+                            </h4>
+                            <ul>
+                                <li v-for="point in project.printPoints || project.points" :key="point" v-html="point"></li>
+                            </ul>
+                        </template>
+                        <div class="print-stack"><span v-for="item in experience.printStack" :key="item">{{ item }}</span></div>
                     </article>
-
-                    <article class="print-job print-job-huawei">
-                        <header>
-                            <div class="print-company">
-                                <span class="print-company-logo"><img :src="Huawei" alt="" /></span>
-                                <div><h3>华为</h3><p>软件工程师 · CIE</p></div>
-                            </div>
-                            <time>2021.09 — 2024.11</time>
-                        </header>
-                        <h4>维护辅助工具 <span>2024.01 — 2024.11</span></h4>
-                        <ul>
-                            <li>设计 RAG 应用整体架构，搭建前后端框架并接入内部聊天机器人，支持历史案例检索与问答。</li>
-                            <li>优化 Elasticsearch 搜索效果，提出多路召回重排序方案，将问题搜索准确率从 <b>50% 提升至 90%</b>。</li>
-                            <li>成果获数据通信研发部长奖，成功申请专利，并完成应用 Docker 化部署。</li>
-                        </ul>
-                        <h4 class="print-subproject">AR 接入路由器 <span>2021.09 — 2023.12</span></h4>
-                        <ul>
-                            <li>使用 C 参与 SSH、TELNET、FTP、NETCONF、NCE 交互、补丁机制及系统模块开发维护。</li>
-                            <li>优化 Jenkins 门禁与版本 CI，MR 合入效率提升 10%+，构建发布效率提升 20%+。</li>
-                            <li>使用 Go、Python、Rust 开发补丁构建、查重和代码检查工具，每年减少约 2 人月投入。</li>
-                            <li>作为 Redis PMC 成员参与定制归一与升级，获 Redis 定制归一攻关激励团队奖。</li>
-                        </ul>
-                        <div class="print-stack"><span>C</span><span>Go</span><span>Rust</span><span>Python</span><span>RAG</span><span>Elasticsearch</span><span>Jenkins</span></div>
-                    </article>
-
-                    <article class="print-job print-job-rich print-job-small">
-                        <header>
-                            <div class="print-company">
-                                <span class="print-company-logo"><img :src="Rich" alt="" /></span>
-                                <div><h3>北京睿企</h3><p>后端 / 全栈工程师</p></div>
-                            </div>
-                            <time>2020.05 — 2021.07</time>
-                        </header>
-                        <h4>NLP 行业大数据应用</h4>
-                        <ul>
-                            <li>负责公安行业大数据标准化模块，维护数据处理流程并对接多方 ETL 数据源。</li>
-                            <li>设计并实现质态监管、热词雷达、自动报告等应用后端，承担部分 React 管理页面开发。</li>
-                            <li>基于 TiDB、MinIO、Elasticsearch 构建数据存储与检索能力，使用 Kubernetes 管理容器。</li>
-                        </ul>
-                        <div class="print-stack"><span>Spring Boot</span><span>React</span><span>TiDB</span><span>MinIO</span><span>Kubernetes</span><span>Elasticsearch</span></div>
-                    </article>
-
-                    <article class="print-job print-job-asiainfo print-job-small">
-                        <header>
-                            <div class="print-company">
-                                <span class="print-company-logo"><img :src="asiainfo" alt="" /></span>
-                                <div><h3>亚信科技</h3><p>全栈工程师</p></div>
-                            </div>
-                            <time>2018.03 — 2020.05</time>
-                        </header>
-                        <h4>电信 CRM 3.0</h4>
-                        <ul>
-                            <li>作为全栈工程师，负责业务功能、数据库设计、服务部署与线上问题处理等全链路交付。</li>
-                            <li>使用 Spring Boot + MyBatis 构建后端，结合 Redis、Kafka、MySQL、Nginx 支撑业务系统。</li>
-                            <li>使用 Vita-Plus 与 Electron 开发前端和桌面应用。</li>
-                        </ul>
-                        <div class="print-stack"><span>Java</span><span>Spring Boot</span><span>MySQL</span><span>Redis</span><span>Kafka</span><span>Electron</span></div>
-                    </article>
-
+                    </div>
                 </section>
 
                 <aside class="print-side">
                     <section>
                         <div class="print-section-title"><span>02</span><h2>个人档案</h2><i></i></div>
-                        <p class="print-profile">熟悉 Linux、Windows、macOS。既能深入 C / Rust 系统开发，也能用 Python、Java、Go 完成业务与 AI 应用交付；熟练使用 AI 工具辅助研发。</p>
+                        <div class="print-side-card">
+                            <ul class="print-profile">
+                                <li v-for="point in profile.introPoints" :key="point" v-html="point"></li>
+                            </ul>
+                            <p class="print-availability"><span></span> 当前专注 Agent 与 AI 应用</p>
+                        </div>
                     </section>
 
                     <section>
                         <div class="print-section-title"><span>03</span><h2>能力矩阵</h2><i></i></div>
-                        <div class="print-skills">
-                            <div><h3>AI 工程</h3><p><span>LLM</span><span>RAG</span><span>Agent</span><span>MCP</span><span>LangChain</span></p></div>
-                            <div><h3>编程语言</h3><p><span>Rust</span><span>Python</span><span>Java</span><span>Go</span><span>JavaScript</span><span>C</span></p></div>
-                            <div><h3>工程与数据</h3><p><span>Docker / K8s</span><span>Jenkins</span><span>MySQL</span><span>Redis</span><span>ES</span></p></div>
-                            <div><h3>前端</h3><p><span>Vue</span><span>React</span><span>ECharts</span><span>Electron</span></p></div>
+                        <div class="print-side-card">
+                            <div class="print-skills">
+                                <div v-for="group in skillGroups" :key="group.title">
+                                    <h3>{{ group.printTitle || group.title }}</h3>
+                                    <p><span v-for="skill in group.printSkills || group.skills" :key="skill">{{ skill }}</span></p>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
                     <section>
                         <div class="print-section-title"><span>04</span><h2>教育背景</h2><i></i></div>
-                        <div class="print-education">
-                            <img :src="UESTC" alt="电子科技大学" />
-                            <div><time>2014.09 — 2018.06</time><h3>电子科技大学</h3><p>软件工程 · 本科</p></div>
+                        <div class="print-side-card">
+                            <div class="print-education">
+                                <img :src="education.logo" :alt="education.school" />
+                                <div>
+                                    <time :datetime="education.periodStart">{{ education.period }}</time>
+                                    <h3>{{ education.school }}</h3>
+                                    <p>{{ education.major }}</p>
+                                </div>
+                            </div>
+                            <p class="print-award">{{ education.award }}</p>
                         </div>
-                        <p class="print-award">人民一等奖学金 · CET-4</p>
                     </section>
 
                     <section>
                         <div class="print-section-title"><span>05</span><h2>资质与成果</h2><i></i></div>
-                        <div class="print-credentials">
-                            <p><span>高级</span>系统架构设计师</p>
-                            <p><span>中级</span>软件设计师</p>
-                            <p><span>认证</span>NVIDIA 深度学习</p>
-                            <p><span>成果</span>发明专利申请</p>
+                        <div class="print-side-card">
+                            <div class="print-credentials">
+                                <p v-for="credential in credentials" :key="credential.title"><span>{{ credential.level }}</span>{{ credential.title }}</p>
+                            </div>
                         </div>
                     </section>
 
-                    <section class="print-quote">
-                        <span>工作理念</span>
-                        <p>“技术的价值，不只在于能运行，更在于能持续创造结果。”</p>
+                    <section>
+                        <div class="print-section-title"><span>06</span><h2>工作理念</h2><i></i></div>
+                        <div class="print-side-card print-quote">
+                            <p>{{ profile.philosophy }}</p>
+                        </div>
                     </section>
                 </aside>
             </div>
 
-            <footer class="print-footer"><strong>42tr<span>.</span></strong><span>用系统思维解决问题，用工程能力交付结果。</span></footer>
-        </main>
+            <footer class="print-footer"><a class="print-wordmark" href="https://42tr.cn">42tr<span>.</span></a><span>{{ profile.footerNote }}</span></footer>
+        </div>
     </div>
 </template>
 
@@ -516,6 +559,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
 .contact-list { display: flex; flex-wrap: wrap; gap: 24px; }
 .contact-item { display: flex; align-items: center; gap: 10px; color: #d3d1dc; font: 12px/1.6 ui-monospace, monospace; }
 .contact-item svg { color: var(--home-accent); }
+.contact-item svg.icon-fill { fill: currentColor; stroke: none; }
 .contact-item small { display: block; margin-bottom: 4px; color: var(--home-muted); font: 10px/1.5 "PingFang SC", "Microsoft YaHei", sans-serif; }
 .contact-item:hover { color: var(--home-accent); }
 .hero-metrics { display: flex; flex-shrink: 0; gap: 28px; }
@@ -544,7 +588,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
 .project + .project { margin-top: 22px; border-top: 1px solid var(--home-border); }
 .project-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .project-heading h4 { margin: 0; font-size: 14px; font-weight: 500; }
-.project-heading span { color: var(--home-muted); white-space: nowrap; font: 10px/1.6 ui-monospace, monospace; }
+.project-heading time { color: var(--home-muted); white-space: nowrap; font: 10px/1.6 ui-monospace, monospace; }
 .project-summary { margin: 12px 0; color: #c9c8d3; font-size: 13px; line-height: 1.85; }
 .project ul { list-style: none; margin: 0; padding: 0; }
 .project li { position: relative; margin: 8px 0; padding-left: 15px; color: var(--home-muted); font-size: 12px; line-height: 1.9; }
@@ -554,7 +598,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
 .stack-list span, .skill-tags span { padding: 6px 9px; border-radius: 6px; background: #292a35; color: #c7c2f6; font: 10px/1.4 ui-monospace, monospace; }
 .side-column { display: grid; gap: 16px; padding-top: 40px; }
 .side-section { min-width: 0; padding: 26px; border: 1px solid var(--home-border); border-radius: 20px; background: var(--home-surface); }
-.intro-card > p { margin: 16px 0 20px; color: var(--home-muted); font-size: 12px; line-height: 1.9; }
+.intro-points { margin: 16px 0 20px; padding: 0; list-style: none; }
+.intro-points li { position: relative; margin: 8px 0; padding-left: 15px; color: var(--home-muted); font-size: 12px; line-height: 1.9; }
+.intro-points li::before { content: ""; position: absolute; left: 0; top: 10px; width: 4px; height: 4px; border-radius: 50%; background: var(--home-accent); }
 .availability { display: flex; align-items: center; gap: 9px; color: #c9c8d3; font-size: 11px; }
 .availability span { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--home-accent); box-shadow: 0 0 0 4px #292a35; }
 .side-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
@@ -621,26 +667,34 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
 }
 
 /* Keep the compact A4 layout while sharing the screen palette. */
+/* Safari 等忽略 @page margin:0 的浏览器：可打印区域更小，等比缩小保证仍是一页
+   （zoom 影响布局本身；Chrome/Firefox 走 @page margin:0 不触发此规则） */
+@media print and (max-width: 780px) {
+    .print-resume { zoom: 0.88; }
+}
+
 @media print {
     @page { size: A4 portrait; margin: 0; }
 
     :global(html), :global(body), :global(#app) {
-        width: 210mm;
         margin: 0 !important;
         padding: 0 !important;
-        background: #ffffff !important;
+        background: #f7f7f4 !important;
         color-scheme: light;
     }
     :global(body) { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    .resume-page { width: 210mm; min-height: 0; padding: 0; }
+    .resume-page { max-width: 210mm; min-height: 0; padding: 0; }
     .site-header, .screen-resume { display: none !important; }
     .print-resume {
-        width: 210mm;
-        min-height: 297mm;
-        padding: 8mm;
+        /* 不写死 210mm：浏览器忽略 @page margin:0 时自适应可打印宽度，避免横向裁切 */
+        width: auto;
+        max-width: 210mm;
+        margin: 0 auto;
+        /* 底部留白给 fixed 页脚；自然高度控制在 ~276mm，A4 / Letter / 默认边距都能一页放下 */
+        padding: 8mm 8mm 12mm;
         display: flex;
         flex-direction: column;
-        gap: 4mm;
+        gap: 2.6mm;
         --print-bg: #f7f7f4;
         --print-surface: #ffffff;
         --print-ink: #17171a;
@@ -655,7 +709,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
         background: var(--print-bg);
         font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
     }
-    .print-header, .print-job, .print-side > section {
+    .print-header, .print-job, .print-side-card {
         border: .25mm solid var(--print-border);
         border-radius: 3mm;
         background: var(--print-surface);
@@ -664,81 +718,97 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
     .print-header {
         position: relative;
         overflow: hidden;
-        padding: 6mm;
+        padding: 4mm;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 43mm;
+        /* 联系栏宽度对齐正文右栏：分隔线落在侧栏卡片左边缘（140.4mm）的参考线上 */
+        grid-template-columns: auto minmax(0, 1fr) 57.6mm;
         gap: 6mm;
     }
     .print-header::after { content: ""; position: absolute; right: 2mm; top: -23mm; width: 43mm; height: 43mm; border: 5mm solid rgba(95,89,201,.07); border-radius: 50%; }
     .print-header > div { position: relative; z-index: 1; }
-    .print-kicker { margin: 0 0 3mm; color: var(--print-accent); font: 600 5.8pt/1.5 ui-monospace, monospace; letter-spacing: .1em; }
-    .print-header h1 { margin: 0 0 3mm; font-size: 27pt; font-weight: 600; line-height: 1.1; }
+    .print-avatar { position: relative; z-index: 1; width: 16mm; height: 16mm; align-self: center; object-fit: cover; border: .6mm solid #e0dcf0; border-radius: 50%; background: #fff; }
+    .print-kicker { margin: 0 0 2mm; color: var(--print-accent); font: 600 6pt/1.5 ui-monospace, monospace; letter-spacing: .1em; }
+    .print-header h1 { margin: 0 0 1.6mm; font-size: 24pt; font-weight: 600; line-height: 1.1; }
     .print-header h1 span, .print-header h2 span { color: var(--print-accent); }
     .print-header h1 span { margin-left: 1mm; }
-    .print-header h2 { margin: 0; font-size: 11pt; font-weight: 500; line-height: 1.5; }
-    .print-summary { margin: 2mm 0 0; color: var(--print-muted); font-size: 7pt; line-height: 1.7; }
+    .print-header h2 { margin: 0; font-size: 11.2pt; font-weight: 500; line-height: 1.5; }
+    .print-summary { margin: 1.5mm 0 0; color: var(--print-muted); font-size: 7.4pt; line-height: 1.55; }
     .print-contact {
         padding-left: 5mm;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
-        gap: 2.5mm;
+        gap: 2mm;
         border-left: .25mm solid var(--print-border);
         color: var(--print-text);
-        font: 6.5pt/1.4 ui-monospace, monospace;
+        font: 6.8pt/1.4 ui-monospace, monospace;
     }
-    .print-contact strong { margin-top: 1mm; padding: 2mm 3mm; border-radius: 1.5mm; color: var(--print-accent); background: var(--print-chip); font-size: 7pt; font-weight: 500; }
-    .print-body { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); align-items: start; gap: 4mm; }
+    .print-contact a { display: flex; align-items: center; gap: 1.5mm; color: inherit; text-decoration: none; }
+    .print-contact svg { width: 2.8mm; height: 2.8mm; flex-shrink: 0; fill: none; stroke: var(--print-accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .print-contact svg.icon-fill { fill: var(--print-accent); stroke: none; }
+    .print-contact strong { margin-top: 1mm; padding: 2mm 3mm; border-radius: 1.5mm; color: var(--print-accent); background: var(--print-chip); font-size: 7.2pt; font-weight: 500; }
+    .print-body { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 3mm; min-height: 221mm; }
     .print-main, .print-side { min-width: 0; }
-    .print-section-title { display: flex; align-items: center; gap: 2mm; margin-bottom: 3mm; }
-    .print-section-title span { color: var(--print-accent); font: 6pt/1 ui-monospace, monospace; }
+    /* 列内卡片用 space-between 摊开：有富余高度时（A4）均匀分布填满页面，
+       内容更高的环境（Safari 默认边距）自动回落为紧凑排列 */
+    .print-main { display: flex; flex-direction: column; }
+    /* 卡片用 space-between 摊开：有富余高度时（A4）均匀分布填满页面，
+       内容更高的环境（Safari 默认边距）自动回落为紧凑排列；
+       标题在摊开容器外，保证两列首卡顶部对齐 */
+    .print-jobs { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .print-jobs .print-job { flex-shrink: 0; }
+    .print-section-title { display: flex; align-items: center; gap: 2mm; margin-bottom: 2.5mm; }
+    .print-section-title span { color: var(--print-accent); font: 6.2pt/1 ui-monospace, monospace; }
     .print-section-title span::after { content: " /"; }
-    .print-section-title h2 { margin: 0; font-size: 9pt; font-weight: 500; line-height: 1.2; }
+    .print-section-title h2 { margin: 0; font-size: 9.2pt; font-weight: 500; line-height: 1.2; }
     .print-section-title i { height: .25mm; flex: 1; background: linear-gradient(90deg, var(--print-border), transparent); }
-    .print-job { margin-bottom: 2.5mm; padding: 2.5mm 3mm; border-left: 1mm solid var(--job-accent, var(--print-accent)); background: linear-gradient(105deg, var(--job-tint, #fff) 0%, var(--print-surface) 43%); }
+    .print-job { margin-bottom: 2.5mm; padding: 3mm 3.5mm; border-left: 1mm solid var(--job-accent, var(--print-accent)); background: linear-gradient(105deg, var(--job-tint, #fff) 0%, var(--print-surface) 43%); }
     .print-job-hontor { --job-accent: #6758c7; --job-tint: #f5f2ff; }
     .print-job-huawei { --job-accent: #d64058; --job-tint: #fff3f3; }
     .print-job-rich { --job-accent: #2f81c5; --job-tint: #f1f7fc; }
     .print-job-asiainfo { --job-accent: #df7c2e; --job-tint: #fff6ed; }
     .print-job:last-child { margin-bottom: 0; }
-    .print-job header { display: flex; justify-content: space-between; align-items: center; gap: 2mm; margin-bottom: 2.5mm; padding-bottom: 2mm; border-bottom: .25mm solid var(--print-border); }
+    .print-job header { display: flex; justify-content: space-between; align-items: center; gap: 2mm; margin-bottom: 2.2mm; padding-bottom: 1.8mm; border-bottom: .25mm solid var(--print-border); }
     .print-company { min-width: 0; display: flex; align-items: center; gap: 2mm; }
-    .print-company-logo { width: 7mm; height: 7mm; flex: 0 0 7mm; padding: 1mm; display: grid; place-items: center; border-radius: 1.5mm; background: var(--job-tint, var(--print-logo)); }
+    .print-company-logo { width: 6.4mm; height: 6.4mm; flex: 0 0 6.4mm; padding: 1mm; display: grid; place-items: center; border-radius: 1.5mm; background: var(--job-tint, var(--print-logo)); }
     .print-company-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .print-job header h3 { color: var(--job-accent, var(--print-ink)); margin: 0 0 .8mm; font-size: 8pt; font-weight: 500; line-height: 1.4; }
-    .print-job header p { margin: 0; color: var(--print-muted); font-size: 6pt; }
-    .print-job time { color: var(--job-accent, var(--print-accent)); white-space: nowrap; font: 5.8pt/1.4 ui-monospace, monospace; }
-    .print-job h4 { display: flex; align-items: baseline; justify-content: space-between; gap: 2mm; margin: 1.8mm 0 1.3mm; font-size: 7.5pt; font-weight: 500; }
-    .print-job h4 span { color: var(--print-muted); white-space: nowrap; font: 5.3pt/1.4 ui-monospace, monospace; }
-    .print-job h4.print-subproject { margin-top: 2.5mm; padding-top: 2mm; border-top: .25mm solid var(--print-border); }
+    .print-job header h3 { color: var(--job-accent, var(--print-ink)); margin: 0 0 .8mm; font-size: 8.2pt; font-weight: 500; line-height: 1.4; }
+    .print-job header p { margin: 0; color: var(--print-muted); font-size: 6.2pt; }
+    .print-job time { color: var(--job-accent, var(--print-accent)); white-space: nowrap; font: 6pt/1.4 ui-monospace, monospace; }
+    .print-job h4 { display: flex; align-items: baseline; justify-content: space-between; gap: 2mm; margin: 1.6mm 0 1.2mm; font-size: 8pt; font-weight: 500; }
+    .print-job h4 span { color: var(--print-muted); white-space: nowrap; font: 5.6pt/1.4 ui-monospace, monospace; }
+    .print-job h4.print-subproject { margin-top: 2mm; padding-top: 1.6mm; border-top: .25mm solid var(--print-border); }
     .print-job ul { list-style: none; margin: 0; padding: 0; }
-    .print-job li { position: relative; margin: 1mm 0; padding-left: 2.5mm; color: var(--print-text); font-size: 6.7pt; line-height: 1.6; }
+    .print-job li { position: relative; margin: .6mm 0; padding-left: 2.5mm; color: var(--print-text); font-size: 7.3pt; line-height: 1.5; }
     .print-job li::before { content: ""; position: absolute; left: .2mm; top: 1.5mm; width: .7mm; height: .7mm; border-radius: 50%; background: var(--job-accent, var(--print-accent)); }
     .print-job li b { color: var(--print-ink); font-weight: 600; }
     .print-stack, .print-skills p { display: flex; flex-wrap: wrap; gap: 1mm; }
     .print-stack { margin: 2mm 0 0; }
-    .print-stack span, .print-skills p span { padding: 1mm 1.4mm; border-radius: 1mm; color: var(--print-chip-text); background: var(--print-chip); font: 5.3pt/1.3 ui-monospace, monospace; }
-    .print-side { display: grid; gap: 3mm; padding-top: 6.8mm; }
-    .print-side > section { padding: 3.5mm; background: #fffefd; }
-    .print-profile { margin: 0; color: var(--print-muted); font-size: 6.8pt; line-height: 1.8; }
-    .print-skills { display: grid; gap: 3mm; }
-    .print-skills h3 { margin: 0 0 1.5mm; color: var(--print-muted); font-size: 6.5pt; font-weight: 400; }
+    .print-stack span, .print-skills p span { padding: 1mm 1.4mm; border-radius: 1mm; color: var(--print-chip-text); background: var(--print-chip); font: 5.8pt/1.3 ui-monospace, monospace; }
+    .print-side { display: flex; flex-direction: column; justify-content: space-between; gap: 2.2mm; }
+    .print-side-card { padding: 3mm; background: #fffefd; }
+    .print-profile { margin: 0; padding: 0; list-style: none; }
+    .print-profile li { position: relative; margin: .8mm 0; padding-left: 2.6mm; color: var(--print-muted); font-size: 7.2pt; line-height: 1.6; }
+    .print-profile li::before { content: ""; position: absolute; left: 0; top: 1.4mm; width: 1mm; height: 1mm; border-radius: 50%; background: var(--print-accent); }
+    .print-availability { display: flex; align-items: center; gap: 1.6mm; margin: 1.6mm 0 0; padding-top: 1.6mm; border-top: 1px solid var(--print-border); color: var(--print-text); font-size: 6.8pt; }
+    .print-availability span { width: 1.4mm; height: 1.4mm; flex-shrink: 0; border-radius: 50%; background: #3d9a5f; }
+    .print-skills { display: grid; gap: 2.4mm; }
+    .print-skills h3 { margin: 0 0 1.2mm; color: var(--print-muted); font-size: 7pt; font-weight: 400; }
     .print-skills p { margin: 0; }
     .print-education { display: flex; align-items: center; gap: 2mm; }
     .print-education img { width: 8mm; height: 8mm; }
-    .print-education time { color: var(--print-accent); font: 5.5pt/1.5 ui-monospace, monospace; }
-    .print-education h3 { margin: 1mm 0; font-size: 7.5pt; font-weight: 500; }
-    .print-education p, .print-award { margin: 0; color: var(--print-muted); font-size: 6pt; line-height: 1.6; }
-    .print-award { margin-top: 3mm; padding-top: 2mm; border-top: .25mm solid var(--print-border); }
+    .print-education time { color: var(--print-accent); font: 5.8pt/1.5 ui-monospace, monospace; }
+    .print-education h3 { margin: 1mm 0; font-size: 7.8pt; font-weight: 500; }
+    .print-education p, .print-award { margin: 0; color: var(--print-muted); font-size: 6.2pt; line-height: 1.6; }
+    .print-award { margin-top: 2mm; padding-top: 1.6mm; border-top: .25mm solid var(--print-border); }
     .print-credentials { display: grid; gap: 1.5mm; }
-    .print-credentials p { margin: 0; padding: 2mm; display: flex; align-items: center; gap: 2mm; border: .25mm solid var(--print-border); border-radius: 1.5mm; font-size: 6pt; }
-    .print-credentials span { color: var(--print-accent); font-size: 5.5pt; }
-    .print-quote > span { color: var(--print-muted); font-size: 6pt; }
-    .print-quote p { margin: 2mm 0 0; font-size: 8pt; line-height: 1.7; }
-    .print-footer { margin-top: auto; padding-top: 3mm; display: flex; align-items: center; justify-content: space-between; gap: 4mm; border-top: .7mm solid var(--print-accent); }
-    .print-footer strong { font: 800 13pt/1 ui-monospace, monospace; letter-spacing: -.06em; }
-    .print-footer strong span { color: var(--print-accent); }
-    .print-footer > span { color: var(--print-muted); font-size: 6pt; }
+    .print-credentials p { margin: 0; padding: 2.2mm; display: flex; align-items: center; gap: 2mm; border: .25mm solid var(--print-border); border-radius: 1.5mm; font-size: 6.5pt; }
+    .print-credentials span { color: var(--print-accent); font-size: 5.8pt; }
+    .print-quote p { margin: 0; font-size: 8.4pt; line-height: 1.6; }
+    .print-footer { position: fixed; bottom: 6mm; left: 7mm; right: 7mm; padding-top: 2mm; display: flex; align-items: center; justify-content: space-between; gap: 4mm; border-top: .7mm solid var(--print-accent); background: var(--print-bg); }
+    .print-footer .print-wordmark { font: 800 13pt/1 ui-monospace, monospace; letter-spacing: -.06em; color: var(--print-ink); text-decoration: none; }
+    .print-footer .print-wordmark span { color: var(--print-accent); }
+    .print-footer > span { color: var(--print-muted); font-size: 6.2pt; }
 }
 </style>
