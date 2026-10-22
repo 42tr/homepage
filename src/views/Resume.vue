@@ -45,13 +45,13 @@ const experiences = [
                 summary: "围绕真实业务场景搭建对话式 AI 助手与智能办公平台。",
                 points: [
                     "基于 Qwen、DeepSeek 等模型构建 Agent 与 MCP 能力，形成可组合的智能助手架构。",
-                    "集成 CosyVoice、SenseVoice、MinerU，落地知识库溯源、公文撰写、PPT / 脑图生成与智能会议等功能。",
-                    "使用 Python 负责模型集成与业务编排，使用 Rust 开发知识库等高性能系统组件。",
+                    "集成 CosyVoice、SenseVoice、MinerU，接入 <b>10 万+</b> 篇文档，落地知识库溯源、公文撰写、PPT / 脑图生成与智能会议。",
+                    "将公文撰写耗时从 <b>8 小时缩短至 5 分钟</b>；使用 Python 完成模型集成与业务编排，使用 Rust 开发知识库等高性能组件。",
                 ],
                 printPoints: [
                     "基于 Qwen、DeepSeek 构建 Agent 与 MCP 能力，支持按用户场景组合工具与业务流程。",
-                    "集成 CosyVoice、SenseVoice、MinerU，落地知识库溯源、公文、PPT、脑图生成与智能会议。",
-                    "使用 Python 完成模型集成与业务编排，使用 Rust 开发知识库等高性能系统组件。",
+                    "集成 CosyVoice、SenseVoice、MinerU，接入 <b>10 万+</b> 篇文档，落地溯源、公文、PPT、脑图与智能会议。",
+                    "公文撰写从 <b>8 小时缩短至 5 分钟</b>；使用 Python 完成模型集成与业务编排，Rust 开发高性能组件。",
                 ],
                 stack: ["LLM", "Agent", "MCP", "Python", "Rust"],
             },
@@ -73,13 +73,13 @@ const experiences = [
                 summary: "面向历史案例检索与运维问答的 RAG 应用，作为整体设计者参与开发。",
                 points: [
                     "设计整体架构并搭建前后端框架，融合关键词与语义搜索，提出多路召回重排序方案。",
-                    "将问题搜索准确率从 50% 提升至 90%，成果获得“数据通信研发部长奖”。",
-                    "完成内部聊天机器人接入与 Docker 化部署，并基于相关成果成功申请专利。",
+                    "将问题搜索准确率从 <b>50% 提升至 90%</b>，成果获得“数据通信研发部长奖”。",
+                    "完成内部聊天机器人接入与 Docker 化部署，服务 <b>200+</b> 工程师，并基于相关成果成功申请专利。",
                 ],
                 printPoints: [
                     "设计 RAG 应用整体架构，搭建前后端框架并接入内部聊天机器人，支持历史案例检索与问答。",
                     "优化 Elasticsearch 搜索效果，提出多路召回重排序方案，将问题搜索准确率从 <b>50% 提升至 90%</b>。",
-                    "成果获数据通信研发部长奖，成功申请专利，并完成应用 Docker 化部署。",
+                    "成果获数据通信研发部长奖，成功申请专利；Docker 化部署后服务 <b>200+</b> 工程师。",
                 ],
                 stack: ["Spring Boot", "Vue 2", "LangChain", "Elasticsearch", "RAG"],
             },
@@ -88,14 +88,14 @@ const experiences = [
                 summary: "参与路由器协议与系统机制开发，兼顾底层实现和研发工具链。",
                 points: [
                     "使用 C 参与 SSH / TELNET / FTP / NETCONF、NCE 交互、补丁机制及系统模块开发维护。",
-                    "维护并优化 Jenkins 门禁与 CI，MR 合入效率提升 10%+，构建发布效率提升 20%+。",
-                    "用 Go、Python、Rust 开发补丁查重、构建网站和代码检查工具，每年减少约 2 人月投入。",
+                    "维护并优化 Jenkins 门禁与 CI，MR 合入效率提升 <b>10%+</b>，构建发布效率提升 <b>20%+</b>。",
+                    "用 Go、Python、Rust 开发补丁查重、构建网站和代码检查工具：查重覆盖 <b>13 种路由器 20+ 版本</b>，累计拦截 <b>100+</b> 个重复补丁，每年减少约 <b>2 人月</b>投入。",
                     "作为 Redis PMC 成员参与定制归一与升级，获 Redis 定制归一攻关激励团队奖。",
                 ],
                 printPoints: [
                     "使用 C 参与 SSH、TELNET、FTP、NETCONF、NCE 交互、补丁机制及系统模块开发维护。",
-                    "优化 Jenkins 门禁与版本 CI，MR 合入效率提升 10%+，构建发布效率提升 20%+。",
-                    "使用 Go、Python、Rust 开发补丁构建、查重和代码检查工具，每年减少约 2 人月投入。",
+                    "优化 Jenkins 门禁与版本 CI，MR 合入效率提升 <b>10%+</b>，构建发布效率提升 <b>20%+</b>。",
+                    "开发补丁查重与代码检查工具，覆盖 <b>13 种路由器 20+ 版本</b>，累计拦截 <b>100+</b> 个重复补丁，年省 <b>2 人月</b>。",
                     "作为 Redis PMC 成员参与定制归一与升级，获 Redis 定制归一攻关激励团队奖。",
                 ],
                 stack: ["C", "Go", "Rust", "Python", "Jenkins", "Redis"],
@@ -117,12 +117,12 @@ const experiences = [
                 title: "公安行业 NLP 应用",
                 summary: "面向行业大数据治理与分析，负责标准化处理模块及多个业务应用的后端设计与实现。",
                 points: [
-                    "维护数据标准化流程，设计并实现质态监管、热词雷达、自动报告等应用。",
+                    "维护数据标准化流程，设计并实现质态监管、热词雷达、自动报告等应用，支撑 <b>13 个地市</b>业务。",
                     "使用内部 ETL 工具处理多方数据，承担部分 React 管理页面与前端问题修复。",
                 ],
                 printPoints: [
                     "负责公安行业大数据标准化模块，维护数据处理流程并对接多方 ETL 数据源。",
-                    "设计并实现质态监管、热词雷达、自动报告等应用后端，承担部分 React 管理页面开发。",
+                    "设计并实现质态监管、热词雷达、自动报告等应用后端，支撑 <b>13 个地市</b>业务。",
                     "基于 TiDB、MinIO、Elasticsearch 构建数据存储与检索能力，使用 Kubernetes 管理容器。",
                 ],
                 stack: ["Spring Boot", "React", "TiDB", "MinIO", "Kubernetes", "Elasticsearch"],
@@ -144,11 +144,11 @@ const experiences = [
                 title: "电信 CRM 3.0",
                 summary: "负责前后端开发、数据库设计与服务部署，完成从业务页面到基础设施的全链路交付。",
                 points: [
-                    "后端使用 Spring Boot + MyBatis，结合 Redis、Kafka、MySQL、Nginx 构建业务服务。",
+                    "后端使用 Spring Boot + MyBatis，结合 Redis、Kafka、MySQL、Nginx 构建服务，支撑 <b>江苏、吉林两省</b>业务。",
                     "前端使用 Vita-Plus 与 Electron 开发桌面及业务应用。",
                 ],
                 printPoints: [
-                    "负责业务功能、数据库设计、服务部署与线上问题处理等全链路交付。",
+                    "负责业务功能、数据库设计、服务部署与线上问题处理等全链路交付，支撑 <b>江苏、吉林两省</b>业务。",
                     "使用 Spring Boot + MyBatis 构建后端，结合 Redis、Kafka、MySQL、Nginx 支撑业务系统。",
                     "使用 Vita-Plus 与 Electron 开发前端和桌面应用。",
                 ],
@@ -309,7 +309,7 @@ const credentials = [
                                         </div>
                                         <p class="project-summary">{{ project.summary }}</p>
                                         <ul>
-                                            <li v-for="point in project.points" :key="point">{{ point }}</li>
+                                            <li v-for="point in project.points" :key="point" v-html="point"></li>
                                         </ul>
                                         <div class="stack-list" aria-label="技术栈">
                                             <span v-for="item in project.stack" :key="item">{{ item }}</span>
@@ -592,6 +592,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
 .project-summary { margin: 12px 0; color: #c9c8d3; font-size: 13px; line-height: 1.85; }
 .project ul { list-style: none; margin: 0; padding: 0; }
 .project li { position: relative; margin: 8px 0; padding-left: 15px; color: var(--home-muted); font-size: 12px; line-height: 1.9; }
+.project li :deep(b) { color: #e8e6f2; font-weight: 600; }
 .project li::before { content: ""; position: absolute; left: 0; top: 10px; width: 4px; height: 4px; border-radius: 50%; background: var(--home-accent); }
 .stack-list, .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
 .stack-list { margin-top: 18px; padding-right: 24px; }
@@ -782,7 +783,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
     .print-job ul { list-style: none; margin: 0; padding: 0; }
     .print-job li { position: relative; margin: .6mm 0; padding-left: 2.5mm; color: var(--print-text); font-size: 7.3pt; line-height: 1.5; }
     .print-job li::before { content: ""; position: absolute; left: .2mm; top: 1.5mm; width: .7mm; height: .7mm; border-radius: 50%; background: var(--job-accent, var(--print-accent)); }
-    .print-job li b { color: var(--print-ink); font-weight: 600; }
+    .print-job li :deep(b) { color: var(--print-ink); font-weight: 600; }
     .print-stack, .print-skills p { display: flex; flex-wrap: wrap; gap: 1mm; }
     .print-stack { margin: 2mm 0 0; }
     .print-stack span, .print-skills p span { padding: 1mm 1.4mm; border-radius: 1mm; color: var(--print-chip-text); background: var(--print-chip); font: 5.8pt/1.3 ui-monospace, monospace; }
