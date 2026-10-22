@@ -2,7 +2,8 @@ name: Build and publish homepage
 
 on:
   push:
-    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,7 +15,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-24.04
-    timeout-minutes: 50
+    timeout-minutes: 60
     permissions:
       contents: read
       packages: write
@@ -29,11 +30,13 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm test
-      - name: Verify blog counters and the LeetCode backend
-        run: python3 -m unittest discover -s services/views -p 'test_*.py'
       - run: npm run build
       - run: npm run verify
-      - name: Upload static site
+      - name: Check Rust backend
+        run: |
+          cargo fmt --manifest-path backend/Cargo.toml -- --check
+          cargo test --manifest-path backend/Cargo.toml
+      - name: Upload embedded static site
         uses: actions/upload-artifact@v6
         with:
           name: homepage-static
@@ -48,19 +51,23 @@ jobs:
           load: true
           tags: homepage:verify
           cache-from: type=gha
-      - name: Check Nginx and HTTP behavior
-        env:
-          HOMEPAGE_IMAGE: homepage:verify
-          HOMEPAGE_PORT: '8080'
-          COMPOSE_PROJECT_NAME: homepage-ci
+      - name: Check Axum HTTP behavior
         run: |
-          docker run --rm homepage:verify nginx -t
-          docker compose up -d --wait --wait-timeout 90
-          node scripts/verify-http.mjs
-          node scripts/verify-views.mjs
+          docker volume create homepage-ci-data
+          docker run -d --name homepage-ci --publish 8080:8080 \
+            --volume homepage-ci-data:/data homepage:verify
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:8080/health >/dev/null && break
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8080/health >/dev/null
+          node scripts/verify-http.mjs http://127.0.0.1:8080
+          node scripts/verify-views.mjs http://127.0.0.1:8080
       - name: Install browser
         run: npx playwright install --with-deps chromium
       - name: Verify browser interactions and print layout
+        env:
+          BASE_URL: http://127.0.0.1:8080
         run: npx playwright test
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -68,17 +75,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and publish Nginx image
+      - name: Build and publish Rust image
         id: image
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          # Alibaba Cloud Personal Edition rejects OCI empty-config attestations.
           provenance: false
           tags: |
             ghcr.io/42tr/homepage:latest
+            ghcr.io/42tr/homepage:${{ github.ref_name }}
             ghcr.io/42tr/homepage:sha-${{ github.sha }}
             ghcr.io/42tr/homepage:run-${{ github.run_id }}-${{ github.run_attempt }}
           cache-from: type=gha
@@ -99,7 +106,7 @@ jobs:
           IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
         run: |
           source_image="docker://ghcr.io/42tr/homepage@${IMAGE_DIGEST}"
-          for tag in "run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" "sha-${GITHUB_SHA}" latest; do
+          for tag in "run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" "sha-${GITHUB_SHA}" "${GITHUB_REF_NAME}" latest; do
             destination_image="docker://${ALIYUN_REGISTRY}/42tr/homepage:${tag}"
             echo "Syncing ${destination_image}"
             skopeo --command-timeout 35m copy --all --preserve-digests --retry-times 3 \
@@ -110,11 +117,8 @@ jobs:
             test "$actual_digest" = "$IMAGE_DIGEST"
             echo "Verified ${tag}: ${actual_digest}"
           done
-      - name: Stop test container
+      - name: Stop smoke-test container
         if: always()
-        env:
-          HOMEPAGE_IMAGE: homepage:verify
-          HOMEPAGE_PORT: '8080'
-          COMPOSE_PROJECT_NAME: homepage-ci
         run: |
-          docker compose down --volumes || true
+          docker rm --force homepage-ci || true
+          docker volume rm homepage-ci-data || true

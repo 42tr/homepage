@@ -1,18 +1,27 @@
-FROM nginx:stable-alpine
-LABEL org.opencontainers.image.source="https://github.com/42tr/homepage"
-ENV BLOG_VIEWS_UPSTREAM=views:8081
-COPY deploy/nginx.conf /etc/nginx/templates/default.conf.template
-# Keep large, unchanged media and page layers reusable across rebuilds.
-# The worker must be able to read builds created with a private umask, too.
-COPY --chmod=755 dist/blog/images/ /usr/share/nginx/html/blog/images/
-COPY --chmod=755 dist/blog/posts/ /usr/share/nginx/html/blog/posts/
-COPY --chmod=755 dist/blog/index.html dist/blog/rss.xml dist/blog/blog.css dist/blog/blog-icon.svg dist/blog/blog-avatar.webp /usr/share/nginx/html/blog/
-COPY --chmod=755 dist/_astro/ /usr/share/nginx/html/_astro/
-COPY --chmod=755 dist/resume/ /usr/share/nginx/html/resume/
-COPY --chmod=755 dist/404.html dist/star.png /usr/share/nginx/html/
-COPY --chmod=755 services/views/server.py services/views/store.py services/views/leetcode.py /opt/homepage-views/
-COPY --chmod=755 dist/api/ /usr/share/nginx/html/api/
-COPY --chmod=755 dist/index.html /usr/share/nginx/html/index.html
-EXPOSE 80
+FROM rust:1.94-bookworm AS builder
+WORKDIR /app
+
+COPY backend /app/backend
+COPY dist /app/dist
+COPY .cargo /app/.cargo
+
+WORKDIR /app/backend
+RUN cargo build --release --locked
+
+FROM debian:bookworm-slim
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --system --create-home --home-dir /nonexistent --shell /usr/sbin/nologin homepage \
+    && mkdir /data \
+    && chown homepage:homepage /data
+
+COPY --from=builder /app/backend/target/release/homepage /usr/local/bin/homepage
+USER homepage
+ENV LISTEN=0.0.0.0:8080
+ENV LEETCODE_REFRESH_SECONDS=600
+VOLUME ["/data"]
+EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget -q -O /dev/null http://127.0.0.1/health || exit 1
+  CMD curl -fsS http://127.0.0.1:8080/health >/dev/null
+ENTRYPOINT ["/usr/local/bin/homepage"]

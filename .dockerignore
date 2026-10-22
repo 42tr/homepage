@@ -1,10 +1,11 @@
 *
 !Dockerfile
-!deploy/
-!deploy/nginx.conf
+!Cargo.toml
+!Cargo.lock
+!.cargo/
+!.cargo/**
+!backend/
+!backend/**
+backend/target/
 !dist/
 !dist/**
-!services/
-!services/views/
-!services/views/server.py
-!services/views/store.py

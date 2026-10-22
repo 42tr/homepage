@@ -28,4 +28,4 @@ const seed = await (await fetch(new URL('/api/leetcode.json', base))).json();
 assert.ok(seed.question_total > 0 && seed.user_slug === data.user_slug);
 const compressed = await fetch(new URL('/blog/posts/post-56', base), { headers: { 'Accept-Encoding': 'gzip' } });
 assert.equal(compressed.headers.get('content-encoding'), 'gzip');
-console.log('Nginx routes, JSON/XML types, real 404s, cache headers and gzip verified.');
+console.log('Axum routes, JSON/XML types, real 404s, cache headers and gzip verified.');

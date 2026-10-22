@@ -10,18 +10,15 @@ test('home content is visible without JavaScript', async ({ browser, baseURL }) 
   await context.close();
 });
 
-test('clock updates and skills toggle without framework hydration', async ({ page }) => {
+test('clock updates and skills render without framework hydration', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
   await expect(page.locator('.clock-card .time')).toHaveText(/\d{2}:\d{2}:\d{2}/);
   const before = await page.locator('.clock-card .time').textContent();
   await expect(page.locator('.clock-card .time')).not.toHaveText(before, { timeout: 3000 });
-  await page.locator('[data-skill-toggle]').click();
-  await expect(page.locator('#skill-details')).toBeHidden();
-  await expect(page.locator('.skill-summary')).toBeVisible();
-  await page.locator('[data-skill-toggle]').click();
   await expect(page.locator('#skill-details')).toBeVisible();
+  await expect(page.locator('#skill-details')).toContainText('Rust');
   expect(await page.locator('astro-island').count()).toBe(0);
   expect(errors).toEqual([]);
 });
