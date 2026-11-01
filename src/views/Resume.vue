@@ -736,7 +736,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--home-accent); o
     .print-job h4 span { color: var(--print-muted); white-space: nowrap; font: 5.6pt/1.4 ui-monospace, monospace; }
     .print-job h4.print-subproject { margin-top: 2mm; padding-top: 1.6mm; border-top: .25mm solid var(--print-border); }
     .print-job ul { list-style: none; margin: 0; padding: 0; }
-    .print-job li { position: relative; margin: .45mm 0; padding-left: 2.5mm; color: var(--print-text); font-size: 9pt; line-height: 1.45; }
+    .print-job li { position: relative; margin: .45mm 0; padding-left: 2.5mm; color: var(--print-text); font-size: 8.5pt; line-height: 1.35; }
     .print-job li::before { content: ""; position: absolute; left: .2mm; top: 1.5mm; width: .7mm; height: .7mm; border-radius: 50%; background: var(--job-accent, var(--print-accent)); }
     .print-job li :deep(b) { color: var(--print-ink); font-weight: 600; }
     .print-side { display: flex; flex-direction: column; gap: 2.2mm; }
