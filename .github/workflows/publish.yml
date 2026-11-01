@@ -32,6 +32,8 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run verify
+      - name: Use official crates.io registry
+        run: rm .cargo/config.toml
       - name: Check Rust backend
         run: |
           cargo fmt --manifest-path backend/Cargo.toml -- --check
