@@ -114,3 +114,237 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 @media (max-width: 1000px) { .detail-layout { grid-template-columns: minmax(0, 760px); justify-content: center; gap: 40px; }.detail-aside { position: static; padding: 24px 0 0; border-top: 1px solid var(--line); border-left: 0; }.toc-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; } }
 @media (max-width: 760px) { .page { width: min(100% - 30px, 600px); }.site-header { min-height: 76px; }.header-note { display: none; }.blog-avatar { width: 36px; height: 36px; }.site-nav { gap: 15px; }.blog-identity { gap: 10px; }.site-intro { grid-template-columns: 1fr; gap: 30px; padding: 58px 0 42px; }.intro-aside { align-self: start; }.archive { grid-template-columns: 1fr; gap: 20px; padding-top: 30px; }.archive-legend { display: inline-block; margin: 12px 0 0 18px; padding: 0 0 0 14px; border: 0; border-left: 1px solid var(--line); }.stream { padding-left: 25px; }.post-card { grid-template-columns: minmax(0, 1fr) 20px; gap: 8px; padding-bottom: 28px; margin-bottom: 28px; }.post-date { grid-column: 1; text-align: left; }.post-trailing { display: contents; }.post-views { right: 34px; bottom: 32px; }.post-title { font-size: 20px; }.site-footer > span { display: none; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+
+
+/* ---------- 与首页统一的玻璃卡片视觉 ---------- */
+body {
+  background: var(--bg);
+}
+body::before {
+  display: none;
+}
+.page {
+  width: min(1200px, 100%);
+}
+.site-header {
+  min-height: 80px;
+}
+.site-intro {
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 48px;
+  padding: 48px 0 44px;
+}
+.site-intro h1 {
+  margin: 14px 0 14px;
+  font-size: clamp(36px, 4.5vw, 52px);
+  letter-spacing: -.055em;
+  line-height: 1.2;
+}
+.site-intro h1 br {
+  display: none;
+}
+.site-description {
+  max-width: 620px;
+  font-size: 14px;
+}
+.intro-aside {
+  align-self: center;
+  gap: 4px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(26, 27, 33, .88);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, .18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.intro-aside strong {
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: 1.2px;
+}
+.archive {
+  gap: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.archive-aside {
+  padding-top: 4px;
+}
+.archive-legend {
+  line-height: 1.9;
+}
+.archive-legend em {
+  margin-bottom: 6px;
+  color: var(--secondary);
+  font-size: 9px;
+  letter-spacing: .8px;
+}
+.stream {
+  padding-left: 32px;
+}
+.stream::before {
+  top: 30px;
+  bottom: 30px;
+  background: linear-gradient(var(--line), rgba(181, 175, 255, .35), var(--line));
+}
+.post-list {
+  gap: 18px;
+}
+.post-card {
+  grid-template-columns: minmax(0, 1fr) 100px 20px;
+  gap: 20px;
+  margin: 0;
+  padding: 26px 26px 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(26, 27, 33, .88);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, .16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color .25s, background .25s, box-shadow .25s, transform .25s;
+}
+.post-card::before {
+  top: 32px;
+  left: -32px;
+  width: 9px;
+  height: 9px;
+  border-width: 2px;
+  border-color: #77718f;
+  box-shadow: 0 0 0 5px var(--bg);
+  transition: border-color .25s, background .25s;
+}
+.post-card:hover {
+  border-color: #77718f;
+  background: #202129;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .26);
+  transform: translateY(-2px);
+}
+.post-card:hover::before {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.post-title {
+  font-size: 20px;
+  line-height: 1.55;
+}
+.post-date {
+  padding-top: 5px;
+  font-size: 11px;
+}
+.post-summary {
+  display: -webkit-box;
+  max-width: 720px;
+  margin: 10px 0 16px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.85;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.post-tags {
+  gap: 8px;
+  margin-top: 14px;
+}
+.tag {
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.tag::before {
+  display: none;
+}
+.post-views {
+  right: 66px;
+  bottom: 31px;
+  font-size: 10px;
+}
+.post-arrow {
+  padding-top: 3px;
+  font-size: 16px;
+  text-align: right;
+}
+.site-footer {
+  margin-top: 48px;
+}
+
+@media (max-width: 760px) {
+  .site-intro {
+    gap: 24px;
+    padding: 36px 0 32px;
+  }
+  .site-intro h1 {
+    font-size: clamp(32px, 9vw, 42px);
+  }
+  .intro-aside {
+    align-self: stretch;
+    padding: 18px 20px;
+    border-radius: 16px;
+  }
+  .archive {
+    gap: 18px;
+    padding-top: 24px;
+  }
+  .archive-legend {
+    display: block;
+    margin: 10px 0 0;
+    padding: 0;
+    border: 0;
+  }
+  .archive-legend em,
+  .archive-legend span {
+    display: inline;
+  }
+  .archive-legend em {
+    margin-right: 12px;
+  }
+  .archive-legend br {
+    display: none;
+  }
+  .stream {
+    padding-left: 22px;
+  }
+  .post-list {
+    gap: 14px;
+  }
+  .post-card {
+    grid-template-columns: minmax(0, 1fr) 20px;
+    gap: 8px 12px;
+    padding: 22px 20px 54px;
+  }
+  .post-card::before {
+    top: 29px;
+    left: -22px;
+  }
+  .post-copy {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .post-date {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 0;
+    text-align: left;
+  }
+  .post-arrow {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 0;
+  }
+  .post-title {
+    font-size: 19px;
+  }
+  .post-summary {
+    -webkit-line-clamp: 4;
+  }
+  .post-views {
+    right: auto;
+    bottom: 23px;
+    left: 20px;
+  }
+}
